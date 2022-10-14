@@ -20,8 +20,15 @@ Route::group(['middleware' => ['auth', 'role:employee']], function () {
 
     Route::resource('shopping', ShoppingController::class);
 
-    Route::resource('item', ItemController::class);
-
     Route::resource('cashier', CashierController::class);
 
 });
+
+Route::group(['middleware' => ['auth', 'role:employee']], function () {
+    Route::resource('item', ItemController::class);
+    Route::get('/item/{item}/status', [ItemController::class, 'status'])->name('item.status');
+
+});
+
+Route::get('/ajax/item', [ItemController::class, 'ajax'])->name('item.ajax');
+Route::get('/ajax/item/{id}', [ItemController::class, 'ajaxById'])->name('item.ajaxById');

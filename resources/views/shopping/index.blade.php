@@ -26,20 +26,22 @@
                                 </tr>
                             </thead>
                             <tbody class="text-center">
-                                @foreach ($items as $key => $item)
+                                @foreach ($datas as $key => $item)
                                     <tr id="table-data">
                                         <th scope="row">{{ ++$key }}</th>
-                                        <td>{{ tanggalDate($item->signed) }}</td>
+                                        <td>{{ tanggalDate($item->date) }}</td>
                                         <td>
-                                            @foreach ($item->items as $value)
-                                                <li>{{ $value }}</li>
+                                            @foreach ($item->details as $value)
+                                                <li>{{ $value->item->name }} -
+                                                    {{ rupiah($value->price) }} -
+                                                    {{ $value->quantity }}/{{ $value->item->unit }}</li>
                                             @endforeach
                                         </td>
                                         <td>{{ rupiah($item->price) }}</td>
                                         <td>{{ $item->description ?? '-' }}</td>
                                         <td>
-                                            <a href="#" class="btn btn-warning btn-sm" id="addStokBtn"><i
-                                                    class="bi bi-pencil-square"></i> Edit</a>
+                                            <a href="{{ route('shopping.edit', $item->id) }}" class="btn btn-warning btn-sm"
+                                                id="addStokBtn"><i class="bi bi-pencil-square"></i> Edit</a>
                                         </td>
                                     </tr>
                                 @endforeach

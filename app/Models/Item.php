@@ -12,8 +12,17 @@ class Item extends Model
 
     protected $guarded = ['id'];
 
-    public function details()
+    protected $casts = [
+        'needs' => 'array',
+    ];
+
+    public function cost_shops()
     {
-        return $this->belongsTo(ItemDetail::class);
+        return $this->hasMany(CostShopDetail::class);
+    }
+    
+    public function transaction_detail_items()
+    {
+        return $this->hasMany(TransactionDetailItem::class);
     }
 }

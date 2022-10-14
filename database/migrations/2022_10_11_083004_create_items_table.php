@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Category;
-use App\Models\Item;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -25,18 +24,9 @@ return new class extends Migration
             $table->enum('type', ['storage', 'sell'])->nullable();
             $table->integer('stock')->default(0);
             $table->integer('price')->default(0);
+            $table->json('needs')->nullable();
             $table->string('image')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-
-            $table->foreign('app_id')->references('id')->on('apps');
-        });
-
-        Schema::create('item_details', function (Blueprint $table) {
-            $table->id();
-            $table->string('app_id');
-            $table->foreignIdFor(Item::class)->constrained();
-            $table->integer('needs');
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();
 
@@ -52,6 +42,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('items');
-        Schema::dropIfExists('item_details');
     }
 };

@@ -2,45 +2,11 @@
 
 @section('content')
     <main class="container">
-        <!-- <div class="row mb-2">
-                <div class="col-md-6">
-                  <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                    <div class="col p-4 d-flex flex-column position-static">
-                      <strong class="d-inline-block mb-2 text-primary">World</strong>
-                      <h3 class="mb-0">Featured post</h3>
-                      <div class="mb-1 text-muted">Nov 12</div>
-                      <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-                      <a href="#" class="stretched-link">Continue reading</a>
-                    </div>
-                    <div class="col-auto d-none d-lg-block">
-                      <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                    <div class="col p-4 d-flex flex-column position-static">
-                      <strong class="d-inline-block mb-2 text-success">Design</strong>
-                      <h3 class="mb-0">Post title</h3>
-                      <div class="mb-1 text-muted">Nov 11</div>
-                      <p class="mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-                      <a href="#" class="stretched-link">Continue reading</a>
-                    </div>
-                    <div class="col-auto d-none d-lg-block">
-                      <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-
-                    </div>
-                  </div>
-                </div>
-              </div> -->
-
         <div class="row g-5 mb-4">
             <div class="col-md-8">
                 <div class="row pt-2 mb-4 mt-3 px-5">
                     <div class="input-group">
-                        <input class="form-control" id="search" type="search" placeholder="Cari Barang"
-                            aria-label="Search">
+                        <input class="form-control" id="search" type="search" placeholder="Cari Barang" aria-label="Search">
                         <span class="input-group-text" id="icon"><i class="bi bi-search"></i></span>
                     </div>
                 </div>
@@ -50,7 +16,7 @@
                     <table id="dt" class="table w-100">
                         <thead>
                             <tr>
-                                <th>nama</th>
+                                <th>name</th>
                                 <th>gender</th>
                                 <th>email</th>
                                 <th>address</th>
@@ -62,45 +28,58 @@
             </div>
 
             <div class="col-md-4">
-                <div class="position-sticky" style="top: 2rem;">
-                    <div class="p-4 pb-5 bg-light rounded">
-                        <h4>Keranjang</h4>
-                        <table class="table">
-                            <thead class="text-center">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Barang</th>
-                                    <th scope="col">Banyak</th>
-                                    <th scope="col">Jumlah</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-center">
-                                <tr>
-                                    <td><a href="#" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a></td>
-                                    <td>Oreo</td>
-                                    <td><input type="number" class="form-control input-qty" value="12"></td>
-                                    <td>Rp. 24.000</td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a></td>
-                                    <td>Bakso</td>
-                                    <td><input type="number" class="form-control input-qty" value="2"></td>
-                                    <td>Rp. 24.000</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3" class="fw-bold">Total</td>
-                                    <td>Rp. 48.000</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <a href="#" class="btn btn-success btn-sm float-end"><i class="bi bi-cash"></i> Proses</a>
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <strong>Whoops!</strong> Ada yang error saat membuat pesanan.<br><br>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
+                @endif
+
+                <div class="position-sticky" style="top: 2rem;">
+                    <form id="formSubmit" action="{{ route('cashier.store') }}" method="POST">
+                        @csrf
+
+                        <div class="p-4 pb-5 bg-light rounded">
+                            <div class="row justify-content-between">
+                                <div class="col-4">
+                                    <h4>Keranjang</h4>
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                        name="name" value="{{ old('name', isset($post->name) ? $post->name : '') }}"
+                                        placeholder="Pemesan" required="">
+                                </div>
+                            </div>
+                            <table class="table">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Barang</th>
+                                        <th scope="col">Banyak</th>
+                                        <th scope="col">Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    <tr class="cart-total">
+                                        <td colspan="3" class="fw-bold">Total</td>
+                                        <td id="total">Rp. 0</td>
+                                        <input type="hidden" id="total-value" value="0">
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <button type="submit" class="btn btn-success btn-sm float-end"><i class="bi bi-cash"></i>
+                                Proses</button>
+                        </div>
+                    </form>
                 </div>
 
             </div>
         </div>
-        {{-- </div> --}}
 
     </main>
 @endsection
@@ -137,9 +116,10 @@
 
 @push('script')
     <script type="text/javascript">
+        $('#total-value').val(0);
         $(document).ready(function() {
             var dt = $('#dt').DataTable({
-                ajax: "https://jsonplaceholder.typicode.com/posts",
+                ajax: "{{ route('item.ajax') }}",
                 bInfo: false,
                 pageLength: 12,
                 lengthChange: false,
@@ -157,11 +137,11 @@
                                 '<div class="card shadow">' +
                                 '  <img src="./assets/images/bakso.jpg" class="card-img-top">' +
                                 '  <div class="card-body">' +
-                                '    <div class="card-text">' + row.title + '</div>' +
-                                '    <div class="card-text">Porsi Besar</div>' +
+                                `    <div class="card-text">${row.name}</div>` +
+                                // '    <div class="card-text">Porsi Besar</div>' +
                                 '    <div class="d-flex justify-content-between">' +
-                                '      <span class="card-text">Rp. 12.000</span>' +
-                                '      <a href="#" class="btn btn-primary btn-sm float-end"><i class="bi bi-cart-plus"></i></a>' +
+                                `      <span class="card-text">${rupiah(row.price)}</span>` +
+                                `      <button type="button" class="btn btn-primary btn-sm float-end" onclick="addCart(${row.id})"><i class="bi bi-cart-plus"></i></button>` +
                                 '    </div>' +
                                 '  </div>' +
                                 '</div>';
@@ -169,7 +149,7 @@
                         }
                     },
                     {
-                        data: "nama",
+                        data: "name",
                         visible: false
                     }
                 ],
@@ -188,6 +168,64 @@
             });
 
         });
+
+        function addCart(id) {
+            $.ajax({
+                url: "{{ url('ajax/item') }}" + '/' + id,
+            }).done(function(response) {
+                var res = response.data
+
+                addToCart(res.id, res.name, res.price)
+            });
+        }
+
+        function addToCart(id, name, price) {
+            var qty = $('.qty-' + id).val()
+            var total = parseInt($('#total-value').val()) + price;
+
+            if (qty != null) {
+                $('.qty-' + id).val(++qty)
+                $('#price-' + id).val(qty * price)
+                $('.price-' + id).html(rupiah(qty * price))
+
+                $('#total').html(rupiah(total));
+                $('#total-value').val(total);
+            } else {
+                var item =
+                    `<tr class="item-${id}">` +
+                    `    <td>` +
+                    `        <button type="button" class="btn btn-sm btn-danger" onclick="removeItem(${id})">` +
+                    '           <i class="bi bi-trash"></i>' +
+                    '        </button>' +
+                    `    </td>` +
+                    `    <td>${name}</td>` +
+                    '    <td>' +
+                    `        <input type="number" name="quantity[]" min="1" class="form-control input-qty qty-${id}" data-id="${id}" value="1">` +
+                    `        <input type="hidden" name="price[]" id="price-${id}" data-id="${id}" value="${price}">` +
+                    `        <input type="hidden" name="id[]" value="${id}">` +
+                    '    </td>' +
+                    `    <td class="price-${id}">${rupiah(price)}</td>` +
+                    '</tr>';
+
+                $(item).insertBefore('.cart-total');
+                $('#total').html(rupiah(total));
+                $('#total-value').val(total);
+            }
+        }
+
+        $('.input-qty :input').on('change', function() {
+            console.log($(this).val());
+            console.log($(this).data('id'));
+        })
+
+        function removeItem(id) {
+            var price = $('#price-' + id).val()
+            var total = parseInt($('#total-value').val()) - price;
+
+            $('#total').html(rupiah(total));
+            $('#total-value').val(total);
+
+            $(`.item-${id}`).remove()
+        }
     </script>
 @endpush
-I

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CostShop;
 use App\Models\Item;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -30,6 +31,7 @@ return new class extends Migration
         Schema::create('cost_shop_details', function (Blueprint $table) {
             $table->id();
             $table->string('app_id');
+            $table->foreignIdFor(CostShop::class)->constrained();
             $table->foreignIdFor(Item::class)->constrained();
             $table->integer('quantity');
             $table->integer('price');
@@ -47,7 +49,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cost_shops');
         Schema::dropIfExists('cost_shop_details');
+        Schema::dropIfExists('cost_shops');
     }
 };

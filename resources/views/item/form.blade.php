@@ -8,7 +8,10 @@
                 class="{{ isset($request['type']) && $request['type'] != 'sell' ? 'offset-3 col-md-6' : 'col-md-12' }} d-flex justify-content-between mb-2">
                 <h4>Tambah Barang</h4>
                 <div>
-                    <button type="button" class="btn btn-primary" id="formSubmit">Simpan</button>
+                    @if (isset($request['type']) && $request['type'] == 'sell')
+                        <button type="button" class="btn btn-{{ isset($post) ? 'warning' : 'primary' }}"
+                            id="formSubmit">{{ isset($post) ? 'Update' : 'Simpan' }}</button>
+                    @endif
                 </div>
             </div>
 
@@ -77,9 +80,8 @@
                                         ];
                                     @endphp
                                     @foreach ($units as $item)
-                                        @if (old('unit', isset($post->value_type) ? $post->value_type : '') == $item['value'])
-                                            <option value="{{ $item['value'] }}" selected>{{ $item['name'] }}
-                                            </option>
+                                        @if (old('name', isset($post->unit) ? $post->unit : '') == $item['value'])
+                                            <option value="{{ $item['value'] }}" selected>{{ $item['name'] }}</option>
                                         @else
                                             <option value="{{ $item['value'] }}">{{ $item['name'] }}</option>
                                         @endif
@@ -109,9 +111,9 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="items" class="form-label">Detail Barang</label>
                                     <div class="row justify-content-between">
                                         <div class="col-9">
+                                            <label for="items" class="form-label">Detail Barang</label>
                                             <select class="form-select" id="items">
                                                 <option value="">Pilih Barang</option>
                                                 @foreach ($items as $item)
@@ -121,9 +123,11 @@
                                             </select>
                                         </div>
                                         <div class="col-2">
+                                            <label for="items" class="form-label">Banyak</label>
                                             <input type="number" class="form-control" id="quantity">
                                         </div>
                                         <div class="col-1">
+                                            <label for="items" class="form-label text-white">____</label>
                                             <div class="d-flex justify-content-end">
                                                 <button type="button" id="addDetail"
                                                     class="btn btn-outline-primary btn-sm text-center px-2 py-0"><i
@@ -139,7 +143,7 @@
                             @if (isset($request['type']) && $request['type'] == 'storage')
                                 <div class="my-4 d-flex justify-content-center">
                                     <button type="submit"
-                                        class="btn btn-{{ isset($post) ? 'secondary' : 'primary' }} w-50">{{ isset($post) ? 'Update' : 'Simpan' }}</button>
+                                        class="btn btn-{{ isset($post) ? 'warning' : 'primary' }} w-50">{{ isset($post) ? 'Update' : 'Simpan' }}</button>
                                 </div>
                             @endif
 
@@ -148,28 +152,30 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="card  mt-2">
-                    <div class="card-body">
-                        <div class="mb-4">
-                            <label class="my-1 mb-2">List Detail Barang</label>
-                            <div class="table-responsive">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Barang</th>
-                                            <th scope="col">Qty</th>
-                                            <th scope="col">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="item_details">
-                                    </tbody>
-                                </table>
+            @if (isset($request['type']) && $request['type'] == 'sell')
+                <div class="col-md-6">
+                    <div class="card  mt-2">
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <label class="my-1 mb-2">List Detail Barang</label>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Barang</th>
+                                                <th scope="col">Qty</th>
+                                                <th scope="col">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="item_details">
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
         </div>
 
     </main>
@@ -224,5 +230,13 @@
             var $formData = $('#formData');
             $formData.submit()
         })
+        details
+        var details = <?= json_encode(old('details', isset($post['details']) ? $post['details'] : '')) ?>;
+
+        if (details != '' && details != null) {
+            details.forEach(e => {
+                addItem(e.id, e.name, e.quantity);
+            });
+        }
     </script>
 @endpush
