@@ -8,10 +8,12 @@
 
                 <div class="row justify-content-end">
                     <div class="col-md-6">
-                        <a href="{{ route('item.create', ['type' => isset($request['type']) ? $request['type'] : '']) }}"
-                            class="btn btn-primary float-end">
-                            <i class="bi bi-plus-lg"></i> Tambah Data
-                        </a>
+                        @can('is_admin')
+                            <a href="{{ route('item.create', ['type' => isset($request['type']) ? $request['type'] : '']) }}"
+                                class="btn btn-primary float-end">
+                                <i class="bi bi-plus-lg"></i> Tambah Data
+                            </a>
+                        @endcan
                     </div>
                 </div>
 
@@ -32,7 +34,9 @@
                                         <th scope="col">Harga</th>
                                         <th scope="col">Detail</th>
                                     @endif
-                                    <th scope="col">Status</th>
+                                    @if (isset($request['type']) && $request['type'] == 'sell')
+                                        <th scope="col">Status</th>
+                                    @endif
                                     <th scope="col">Aksi</th>
                                 </tr>
                             </thead>
@@ -59,15 +63,17 @@
                                                 @endforeach
                                             </td>
                                         @endif
-                                        <td>
-                                            @if ($item->status)
-                                                <a href="{{ route('item.status', $item->id) }}"
-                                                    class="btn btn-sm btn-primary">Aktif</a>
-                                            @else
-                                                <a href="{{ route('item.status', $item->id) }}"
-                                                    class="btn btn-sm btn-danger">Aktif</a>
-                                            @endif
-                                        </td>
+                                        @if (isset($request['type']) && $request['type'] == 'sell')
+                                            <td>
+                                                @if ($item->status)
+                                                    <a href="{{ route('item.status', $item->id) }}"
+                                                        class="btn btn-sm btn-primary">Aktif</a>
+                                                @else
+                                                    <a href="{{ route('item.status', $item->id) }}"
+                                                        class="btn btn-sm btn-danger">Aktif</a>
+                                                @endif
+                                            </td>
+                                        @endif
                                         <td>
                                             <a href="{{ route('item.edit', [$item->id, 'type' => isset($request['type']) ? $request['type'] : '']) }}"
                                                 class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>

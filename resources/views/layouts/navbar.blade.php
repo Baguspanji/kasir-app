@@ -29,6 +29,9 @@
                             href="{{ url('home') }}"><i class="bi bi-house"></i>
                             Beranda</a>
 
+                        <a class="p-2 nav-link {{ request()->is('cashier*') ? 'active' : '' }}"
+                            href="{{ route('cashier.index') }}"><i class="bi bi-cart"></i> Kasir</a>
+
                         <a class="p-2 nav-link {{ request()->is('shopping*') ? 'active' : '' }}"
                             href="{{ route('shopping.index') }}"><i class="bi bi-building"></i>
                             Pembelajaan</a>
@@ -47,28 +50,27 @@
                             </ul>
                         </div>
 
-                        <a class="p-2 nav-link {{ request()->is('cashier*') ? 'active' : '' }}"
-                            href="{{ route('cashier.index') }}"><i class="bi bi-cart"></i> Kasir</a>
-
-                        <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-fill"></i> Admin
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="#">User</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Pemasukan</a></li>
-                                <li><a class="dropdown-item" href="#">Pengeluaran</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Master Data</a></li>
-                                <li><a class="dropdown-item" href="#">Pengaturan Toko</a></li>
-                            </ul>
-                        </div>
+                        @can('is_admin')
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-fill"></i> Admin
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <li><a class="dropdown-item" href="#">User</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#">Pemasukan</a></li>
+                                    <li><a class="dropdown-item" href="#">Pengeluaran</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#">Master Data</a></li>
+                                    <li><a class="dropdown-item" href="#">Pengaturan Toko</a></li>
+                                </ul>
+                            </div>
+                        @endcan
                     </div>
                 </div>
             </div>

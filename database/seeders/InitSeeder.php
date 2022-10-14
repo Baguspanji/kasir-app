@@ -35,6 +35,16 @@ class InitSeeder extends Seeder
                 'role' => 'admin',
                 'status' => true,
             ],
+            [
+                'app_id' => 'app.demo.kasir',
+                'username' => 'employee_demo',
+                'name' => 'Employee Kasir',
+                'email' => 'employee@demo.com',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'employee',
+                'status' => true,
+            ],
         ]);
 
         $values = [];
