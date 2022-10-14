@@ -200,8 +200,8 @@
                     `    </td>` +
                     `    <td>${name}</td>` +
                     '    <td>' +
-                    `        <input type="number" name="quantity[]" min="1" class="form-control input-qty qty-${id}" data-id="${id}" value="1">` +
-                    `        <input type="hidden" name="price[]" id="price-${id}" data-id="${id}" value="${price}">` +
+                    `        <input type="number" name="quantity[]" min="1" class="form-control input-qty qty-${id}" onchange="quantity(${id})" value="1">` +
+                    `        <input type="hidden" name="price[]" id="price-${id}" value="${price}">` +
                     `        <input type="hidden" name="id[]" value="${id}">` +
                     '    </td>' +
                     `    <td class="price-${id}">${rupiah(price)}</td>` +
@@ -213,10 +213,29 @@
             }
         }
 
-        $('.input-qty :input').on('change', function() {
-            console.log($(this).val());
-            console.log($(this).data('id'));
-        })
+        function quantity(id) {
+            var qty = $('.qty-' + id).val()
+            var total = parseInt($('#total-value').val())
+
+            // total setelah dikurangi
+            total = total - parseInt($('#price-' + id).val())
+
+            $.ajax({
+                url: "{{ url('ajax/item') }}" + '/' + id,
+            }).done(function(response) {
+                var res = response.data
+
+                var price_now = res.price * qty
+                $('#price-' + id).val(price_now)
+                $('.price-' + id).html(rupiah(price_now))
+
+                // total setelah ditambah
+                total = total + price_now
+                $('#total').html(rupiah(total));
+                $('#total-value').val(total);
+            });
+
+        }
 
         function removeItem(id) {
             var price = $('#price-' + id).val()
