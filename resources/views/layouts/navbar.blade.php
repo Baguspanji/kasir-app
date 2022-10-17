@@ -57,17 +57,17 @@
                                     <i class="bi bi-person-fill"></i> Admin
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <li><a class="dropdown-item" href="#">User</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('user.index') }}">User</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li><a class="dropdown-item" href="#">Pemasukan</a></li>
                                     <li><a class="dropdown-item" href="#">Pengeluaran</a></li>
-                                    <li>
+                                    {{-- <li>
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li><a class="dropdown-item" href="#">Master Data</a></li>
-                                    <li><a class="dropdown-item" href="#">Pengaturan Toko</a></li>
+                                    <li><a class="dropdown-item" href="#">Pengaturan Toko</a></li> --}}
                                 </ul>
                             </div>
                         @endcan

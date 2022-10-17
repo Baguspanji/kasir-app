@@ -53,7 +53,7 @@
                                 <input type="text" name="name"
                                     class="form-control @error('name') is-invalid @enderror" id="name"
                                     value="{{ old('name', isset($post->name) ? $post->name : '') }}"
-                                    placeholder="Masukkan Nama Kelas" required="">
+                                    placeholder="Masukkan Nama" required="">
 
                                 @error('name')
                                     <div class="invalid-feedback">
