@@ -39,7 +39,7 @@
                         <div class="nav-item dropdown {{ request()->is('item*') ? 'active' : '' }}">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-fill"></i> Barang
+                                <i class="bi bi-basket"></i> Barang
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <li><a class="dropdown-item" href="{{ route('item.index') }}">Menu</a></li>
