@@ -19,7 +19,7 @@ Route::controller(LoginController::class)->group(function () {
 Route::group(['middleware' => ['auth', 'role:employee']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    Route::resource('shopping', ShoppingController::class);
+    // Route::resource('shopping', ShoppingController::class);
 
     Route::resource('cashier', CashierController::class);
 
@@ -28,7 +28,7 @@ Route::group(['middleware' => ['auth', 'role:employee']], function () {
 Route::group(['middleware' => ['auth', 'role:employee']], function () {
     Route::resource('item', ItemController::class);
     Route::get('/item/{item}/status', [ItemController::class, 'status'])->name('item.status');
-    
+
     Route::resource('user', UserController::class);
     Route::get('/user/{user}/status', [UserController::class, 'status'])->name('user.status');
 });

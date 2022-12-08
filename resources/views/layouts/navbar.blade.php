@@ -32,23 +32,14 @@
                         <a class="p-2 nav-link {{ request()->is('cashier*') ? 'active' : '' }}"
                             href="{{ route('cashier.index') }}"><i class="bi bi-cart"></i> Kasir</a>
 
-                        <a class="p-2 nav-link {{ request()->is('shopping*') ? 'active' : '' }}"
+                        {{-- <a class="p-2 nav-link {{ request()->is('shopping*') ? 'active' : '' }}"
                             href="{{ route('shopping.index') }}"><i class="bi bi-building"></i>
-                            Pembelajaan</a>
+                            Pembelajaan</a> --}}
 
-                        <div class="nav-item dropdown {{ request()->is('item*') ? 'active' : '' }}">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-basket"></i> Barang
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="{{ route('item.index') }}">Menu</a></li>
-                                <li>
-                                    <a class="dropdown-item"
-                                        href="{{ route('item.index', ['type' => 'storage']) }}">Gudang</a>
-                                </li>
-                            </ul>
-                        </div>
+                        <a class="p-2 nav-link {{ request()->is('item*') ? 'active' : '' }}"
+                            href="{{ route('item.index') }}">
+                            <i class="bi bi-basket"></i>
+                            Barang</a>
 
                         @can('is_admin')
                             <div class="nav-item dropdown">
@@ -57,17 +48,18 @@
                                     <i class="bi bi-person-fill"></i> Admin
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <li><a class="dropdown-item" href="{{ route('user.index') }}">User</a></li>
+                                    {{-- <li><a class="dropdown-item" href="{{ route('user.index') }}">User</a></li> --}}
+                                    {{-- <li>
+                                        <hr class="dropdown-divider">
+                                    </li> --}}
+                                    <li><a class="dropdown-item" href="#">Transaksi</a></li>
+                                    <li><a class="dropdown-item" href="#">Pemasukan</a></li>
+                                    {{-- <li><a class="dropdown-item" href="#">Pengeluaran</a></li> --}}
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" href="#">Pemasukan</a></li>
-                                    <li><a class="dropdown-item" href="#">Pengeluaran</a></li>
-                                    {{-- <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="#">Master Data</a></li>
-                                    <li><a class="dropdown-item" href="#">Pengaturan Toko</a></li> --}}
+                                    {{-- <li><a class="dropdown-item" href="#">Master Data</a></li> --}}
+                                    <li><a class="dropdown-item" href="#">Pengaturan Toko</a></li>
                                 </ul>
                             </div>
                         @endcan

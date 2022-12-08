@@ -51,7 +51,7 @@
                                 <div class="col-6">
                                     <input type="text" class="form-control @error('name') is-invalid @enderror"
                                         name="name" value="{{ old('name', isset($post->name) ? $post->name : '') }}"
-                                        placeholder="Pemesan" required="">
+                                        placeholder="Pemesan">
                                 </div>
                             </div>
                             <table class="table">
@@ -135,7 +135,7 @@
                         render: function(data, type, row, meta) {
                             var html =
                                 '<div class="card shadow">' +
-                                '  <img src="./assets/images/bakso.jpg" class="card-img-top">' +
+                                '  <img src="./assets/images/dummy-image.jpg" class="card-img-top">' +
                                 '  <div class="card-body">' +
                                 `    <div class="card-text">${row.name}</div>` +
                                 // '    <div class="card-text">Porsi Besar</div>' +

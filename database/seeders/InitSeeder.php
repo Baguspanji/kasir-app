@@ -35,70 +35,71 @@ class InitSeeder extends Seeder
                 'role' => 'admin',
                 'status' => true,
             ],
-            [
-                'app_id' => 'app.demo.kasir',
-                'username' => 'employee_demo',
-                'name' => 'Employee Kasir',
-                'email' => 'employee@demo.com',
-                'password' => Hash::make('password'),
-                'email_verified_at' => now(),
-                'role' => 'employee',
-                'status' => true,
-            ],
+            // [
+            //     'app_id' => 'app.demo.kasir',
+            //     'username' => 'employee_demo',
+            //     'name' => 'Employee Kasir',
+            //     'email' => 'employee@demo.com',
+            //     'password' => Hash::make('password'),
+            //     'email_verified_at' => now(),
+            //     'role' => 'employee',
+            //     'status' => true,
+            // ],
         ]);
 
-        $values = [];
-        foreach (['Makanan', 'Minuman', 'Kopi', 'Bahan Mentah'] as $value) {
-            $values[] = [
-                'app_id' => 'app.demo.kasir',
-                'name' => $value,
-                'created_at' => now(),
-            ];
-        }
+        // $values = [];
+        // foreach (['Makanan', 'Minuman', 'Kopi', 'Bahan Mentah'] as $value) {
+        //     $values[] = [
+        //         'app_id' => 'app.demo.kasir',
+        //         'name' => $value,
+        //         'created_at' => now(),
+        //     ];
+        // }
 
-        DB::table('categories')->insert($values);
+        // DB::table('categories')->insert($values);
 
         $items = [];
         foreach ([
             [
-                'category' => 4,
                 'name' => 'Susu Murni',
-                'unit' => 'gram',
-                'type' => 'storage',
+                'unit' => '100/gram',
+                'type' => 'sell',
+                'take_price' => 1000,
+                'price' => 2000,
             ],
             [
-                'category' => 4,
                 'name' => 'Kentang',
-                'unit' => 'gram',
-                'type' => 'storage',
+                'unit' => '100/gram',
+                'type' => 'sell',
+                'take_price' => 1000,
+                'price' => 2000,
             ],
             [
-                'category' => 4,
                 'name' => 'Kopi Bubuk Dampit',
-                'unit' => 'gram',
-                'type' => 'storage',
+                'unit' => '100/gram',
+                'type' => 'sell',
+                'take_price' => 1000,
+                'price' => 2000,
             ],
             [
-                'category' => 4,
                 'name' => 'Mie Sedap Campur',
-                'unit' => 'pcs',
-                'type' => 'storage',
+                'unit' => '1/pack',
+                'type' => 'sell',
+                'take_price' => 1000,
+                'price' => 2000,
             ],
             [
-                'category' => 4,
                 'name' => 'Sosis Ayam',
-                'unit' => 'pcs',
-                'type' => 'storage',
+                'unit' => '1/pcs',
+                'type' => 'sell',
+                'take_price' => 1000,
+                'price' => 2000,
             ],
         ] as $item) {
-            $items[] = [
+            $items[] = array_merge([
                 'app_id' => 'app.demo.kasir',
-                'category_id' => $item['category'],
-                'name' => $item['name'],
-                'unit' => $item['unit'],
-                'type' => $item['type'],
                 'created_at' => now(),
-            ];
+            ], $item);
         }
 
         DB::table('items')->insert($items);

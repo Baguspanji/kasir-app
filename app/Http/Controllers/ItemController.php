@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,64 +11,14 @@ class ItemController extends Controller
 {
     public function index()
     {
-        $request = [
-            'type' => request()->type ?? 'sell',
-        ];
+        $datas = Item::where([
+            'app_id' => Auth::user()->app_id,
+            'type' => 'sell',
+        ])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        if ($request['type'] == 'sell') {
-            $itemData = Item::where([
-                'app_id' => Auth::user()->app_id,
-                'type' => $request['type'],
-            ])
-                ->orderBy('created_at', 'desc')
-                ->get();
-
-            $items = Item::where([
-                'app_id' => Auth::user()->app_id,
-                'type' => 'storage',
-            ])->get();
-
-            $datas = [];
-            foreach ($itemData as $data) {
-                $details = [];
-                foreach ($data->needs as $need) {
-                    foreach ($items as $value) {
-                        if ($need['item_id'] == $value->id) {
-                            $value->quantity = $need['quantity'];
-                            $details[] = $value;
-                        }
-                    }
-                }
-
-                $data->details = $details;
-                $datas[] = $data;
-            }
-        } elseif ($request['type'] == 'storage') {
-            $itemData = Item::with(['cost_shops', 'transaction_detail_items'])
-                ->where([
-                    'app_id' => Auth::user()->app_id,
-                    'type' => $request['type'],
-                ])
-                ->orderBy('created_at', 'desc')
-                ->get();
-
-            $datas = [];
-            foreach ($itemData as $data) {
-                $stock = 0;
-                foreach ($data->cost_shops as $cost) {
-                    $stock += $cost->quantity;
-                }
-
-                foreach ($data->transaction_detail_items as $cost) {
-                    $stock -= $cost->quantity;
-                }
-
-                $data->stock = $stock;
-                $datas[] = $data;
-            }
-        }
-
-        return view('item.index', compact('datas', 'request'));
+        return view('item.index', compact('datas'));
     }
 
     public function ajax()
@@ -102,61 +51,28 @@ class ItemController extends Controller
 
     public function create()
     {
-        $request = [
-            'type' => request()->type ?? 'sell',
-        ];
-
-        $items = [];
-        if ($request['type'] == 'sell') {
-            $items = Item::where([
-                'app_id' => Auth::user()->app_id,
-                'type' => 'storage',
-            ])
-                ->orderBy('name', 'asc')
-                ->get();
-        }
-
-        $categories = Category::where([
-            'app_id' => Auth::user()->app_id,
-        ])
-            ->orderBy('name', 'asc')
-            ->get();
-
-        return view('item.form', compact('request', 'categories', 'items'));
+        return view('item.form');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'category_id' => 'required|exists:categories,id',
             'name' => 'required|string',
-            'unit' => 'required|in:gram,pcs',
-            'price' => 'numeric',
-            'type' => 'required|in:sell,storage',
+            'unit' => 'required|string',
+            'take_price' => 'required|numeric',
+            'price' => 'required|numeric',
         ]);
 
         $dataCreated = array_merge($request->all(), [
             'app_id' => Auth::user()->app_id,
+            'type' => 'sell',
+            'unit' => $request->per_unit . '/' . $request->unit,
         ]);
-
-        if (isset($request->item_details)) {
-            $item_details = [];
-            foreach ($request->item_details as $key => $value) {
-                $item_details[] = [
-                    'item_id' => $value,
-                    'quantity' => $request->quantity_details[$key],
-                ];
-            }
-
-            $dataCreated = array_merge($dataCreated, [
-                'needs' => $item_details,
-            ]);
-        }
 
         Item::create($dataCreated);
 
         Session::flash('success', 'Berhasil membuat data!');
-        return redirect()->route('item.index', ['type' => $request['type']]);
+        return redirect()->route('item.index');
     }
 
     public function show($id)
@@ -166,54 +82,24 @@ class ItemController extends Controller
 
     public function edit($id)
     {
-        $request = [
-            'type' => request()->type ?? 'sell',
-        ];
-
         $post = Item::where([
             'id' => $id,
             'app_id' => Auth::user()->app_id,
         ])->first();
 
-        $items = [];
-        if ($request['type'] == 'sell') {
-            $items = Item::where([
-                'app_id' => Auth::user()->app_id,
-                'type' => 'storage',
-            ])
-                ->orderBy('name', 'asc')
-                ->get();
-        }
+        $post->per_unit = explode('/', $post->unit)[0];
+        $post->unit = explode('/', $post->unit)[1];
 
-        $categories = Category::where([
-            'app_id' => Auth::user()->app_id,
-        ])
-            ->orderBy('name', 'asc')
-            ->get();
-
-        $details = [];
-        foreach ($post->needs as $value) {
-            foreach ($items as $key => $item) {
-                if ($item->id == $value['item_id']) {
-                    $item->quantity = $value['quantity'];
-                    $details[] = $item;
-                }
-            }
-        }
-
-        $post->details = $details;
-
-        return view('item.form', compact('request', 'categories', 'items', 'post'));
+        return view('item.form', compact('post'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'category_id' => 'required|exists:categories,id',
             'name' => 'required|string',
-            'unit' => 'required|in:gram,pcs',
-            'price' => 'numeric',
-            'type' => 'required|in:sell,storage',
+            'unit' => 'required|string',
+            'take_price' => 'required|numeric',
+            'price' => 'required|numeric',
         ]);
 
         $data = Item::where([
@@ -223,24 +109,10 @@ class ItemController extends Controller
 
         $dataEdited = $request->all();
 
-        if (isset($request->item_details)) {
-            $item_details = [];
-            foreach ($request->item_details as $key => $value) {
-                $item_details[] = [
-                    'item_id' => $value,
-                    'quantity' => $request->quantity_details[$key],
-                ];
-            }
-
-            $dataEdited = array_merge($dataEdited, [
-                'needs' => $item_details,
-            ]);
-        }
-
         $data->update($dataEdited);
 
         Session::flash('success', 'Berhasil update data!');
-        return redirect()->route('item.index', ['type' => $request['type']]);
+        return redirect()->route('item.index');
     }
 
     public function destroy($id)
