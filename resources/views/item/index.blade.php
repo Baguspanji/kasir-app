@@ -42,9 +42,6 @@
                                         </td> --}}
                                         <td>{{ $item->code ?? '-' }}</td>
                                         <td>{{ $item->name }}</td>
-                                        @if (isset($request['type']) && $request['type'] != 'sell')
-                                            <td>{{ $item->stock }}</td>
-                                        @endif
                                         <td>{{ Str::ucfirst($item->unit) }}</td>
                                         <td>{{ $item->take_price == 0 ? '-' : rupiah($item->take_price) }}</td>
                                         <td>{{ $item->price == 0 ? '-' : rupiah($item->price) }}</td>

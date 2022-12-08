@@ -52,7 +52,10 @@
                                     {{-- <li>
                                         <hr class="dropdown-divider">
                                     </li> --}}
-                                    <li><a class="dropdown-item" href="#">Transaksi</a></li>
+                                    <li>
+                                        <a class="dropdown-item {{ request()->is('transaction*') ? 'active' : '' }}"
+                                            href="{{ route('transaction.index') }}">Transaksi</a>
+                                    </li>
                                     <li><a class="dropdown-item" href="#">Pemasukan</a></li>
                                     {{-- <li><a class="dropdown-item" href="#">Pengeluaran</a></li> --}}
                                     <li>
