@@ -10,7 +10,8 @@ return [
     | Valid values are: cups, network, windows
     |
     */
-    'connector_type' => 'cups',
+    // from env
+    'connector_type' => env('PRINTER_CONNECTOR_TYPE', 'cups'),
     /*
     |--------------------------------------------------------------------------
     | Printer connector descriptor
@@ -19,7 +20,7 @@ return [
     | Typically printer name or IP address.
     |
     */
-    'connector_descriptor' => 'POS58-BL',
+    'connector_descriptor' => env('PRINTER_CONNECTOR_DESCRIPTOR', 'POS58'),
     /*
     |--------------------------------------------------------------------------
     | Printer port
@@ -28,5 +29,5 @@ return [
     | Typically 9100.
     |
     */
-    'connector_port' => 9100,
+    'connector_port' => env('PRINTER_CONNECTOR_PORT', 9100),
 ];
