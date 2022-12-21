@@ -7,11 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Nota Transaksi</title>
 
-    <link href="{{ asset('assets/fonts/fake-receipt/Fake Receipt Regular.ttf') }}" rel="stylesheet">
-
     <?php
     $style = '
                         <style>
+                            @font-face {
+                                font-family: "Fake Receipt";
+                                src: url("{{ asset("assets/fonts/fake-receipt/Fake Receipt Regular.ttf") }}");
+                            }
+
                             * {
                                 font-family: "Fake Receipt", sans-serif;
                                 color: black;
@@ -20,10 +23,10 @@
                             p {
                                 display: block;
                                 margin: 3px;
-                                font-size: 9pt;
+                                font-size: 7pt;
                             }
                             table td {
-                                font-size: 8pt;
+                                font-size: 6pt;
                             }
                             .text-center {
                                 text-align: center;
@@ -33,15 +36,15 @@
                             }
                             @media print {
                                 @page {
-                                    margin: 2px;
-                                    size: 7cm
+                                    margin: 3px;
+                                    size: 54mm
                         ';
 
     $style .= !empty($_COOKIE['innerHeight']) ? $_COOKIE['innerHeight'] . 'mm; }' : '}';
 
     $style .= '
                                     html, body {
-                                        width: 7cm;
+                                        width: 54mm;
                                     }
                                     .btn-print {
                                         display: none;
@@ -54,7 +57,7 @@
     {!! $style !!}
 </head>
 
-<body onload="window.print()" style="width: 7cm;">
+<body onload="window.print()" style="width: 54mm;">
     <button class="btn-print" style="position: absolute; right: 1rem; top: rem;" onclick="window.print()">Print</button>
     <div class="text-center">
         <h3 style="margin-bottom: 5px;">{{ strtoupper($app->name ?? config('app.name')) }}</h3>
@@ -68,7 +71,7 @@
     </div>
     <div class="clear-both" style="clear: both;"></div>
     <p>Nama : {{ $item->name ?? '-' }}</p>
-    <p class="text-center">===================================</p>
+    <p class="text-center">=============================</p>
 
     <br>
     <table width="100%" style="border: 0;">
@@ -83,7 +86,7 @@
             </tr>
         @endforeach
     </table>
-    <p class="text-center">-----------------------------------</p>
+    <p class="text-center">-----------------------------</p>
 
     <table width="100%" style="border: 0;">
         <tr>
@@ -112,7 +115,7 @@
         </tr>
     </table>
 
-    <p class="text-center">===================================</p>
+    <p class="text-center">=============================</p>
     <p class="text-center">-- TERIMA KASIH --</p>
 
     <script>
@@ -123,7 +126,7 @@
             html.clientHeight, html.scrollHeight, html.offsetHeight
         );
         document.cookie = "innerHeight=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        // document.cookie = "innerHeight="+ ((height + 50) * 0.264583);
+        // document.cookie = "innerHeight="+ ((height + 50) * 0.264543);
     </script>
 </body>
 

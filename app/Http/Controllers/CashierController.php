@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\App;
 use App\Models\Item;
 use App\Models\Transaction;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Helpers\ReceiptPrinter\ReceiptPrinter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -71,6 +71,8 @@ class CashierController extends Controller
 
         $transaction->details()->createMany($detailCreated);
 
+        $this->print($transaction->id);
+
         return redirect()->route('cashier.index');
     }
 
@@ -94,6 +96,63 @@ class CashierController extends Controller
         // $pdf = PDF::loadView('cashier.pdf', compact('item', 'app'));
         // $pdf->setPaper(0, 0, 609, 440, 'potrait');
         // return $pdf->stream('Transaksi-' . date('Y-m-d-his') . '.pdf');
+    }
+
+    private function print($id)
+    {
+        $app = App::where([
+            'id' => Auth::user()->app_id,
+        ])->first();
+
+        $item = Transaction::with([
+            'details',
+            'details.item',
+        ])
+            ->Where([
+                'app_id' => Auth::user()->app_id,
+                'id' => $id,
+            ])->first();
+
+        $store_name = $app->name;
+        $store_address = $app->address;
+        $store_phone = $app->phone;
+        $store_email = '';
+        $store_website = '';
+        $buyer_name = $item->name;
+        $currency = 'Rp ';
+        $tax_percentage = 0;
+        $image_path = 'logo.png';
+        $amount_paid = $item->amount_paid;
+        $total_price = $item->total_price;
+
+        // Init printer
+        $printer = new ReceiptPrinter;
+        $printer->init(
+            config('receiptprinter.connector_type'),
+            config('receiptprinter.connector_descriptor')
+        );
+
+        // Set store info
+        $printer->setStore($store_name, $store_address, $store_phone, $store_email, $store_website);
+        $printer->setBuyer($buyer_name);
+        $printer->setCurrency($currency);
+        $printer->setRequestAmount($total_price);
+        $printer->setAmountPaid($amount_paid);
+        $printer->setTax($tax_percentage);
+
+        // Add items
+        foreach ($item->details as $detail) {
+            $printer->addItem(
+                $detail->item->name,
+                $detail->quantity,
+                $detail->price,
+            );
+        }
+
+        $printer->calculateGrandTotal();
+
+        // Print receipt
+        $printer->printReceipt();
     }
 
     public function edit($id)

@@ -20,9 +20,9 @@ return new class extends Migration
             $table->id();
             $table->string('app_id');
             $table->string('name')->nullable();
-            $table->string('total_take_price');
+            $table->integer('total_take_price');
             $table->integer('total_price');
-            $table->integer('amount_paid');
+            $table->integer('amount_paid')->default(0);
             $table->date('date');
             $table->string('created_by');
             $table->timestamps();
