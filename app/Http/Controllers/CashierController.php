@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\App;
 use App\Models\Item;
 use App\Models\Transaction;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -73,7 +75,24 @@ class CashierController extends Controller
 
     public function show($id)
     {
-        //
+        $app = App::where([
+            'id' => Auth::user()->app_id,
+        ])->first();
+
+        $item = Transaction::with([
+            'details',
+            'details.item',
+        ])
+            ->Where([
+                'app_id' => Auth::user()->app_id,
+                'id' => $id,
+            ])->first();
+
+        return view('cashier.pdf', compact('item', 'app'));
+
+        // $pdf = PDF::loadView('cashier.pdf', compact('item', 'app'));
+        // $pdf->setPaper(0, 0, 609, 440, 'potrait');
+        // return $pdf->stream('Transaksi-' . date('Y-m-d-his') . '.pdf');
     }
 
     public function edit($id)
