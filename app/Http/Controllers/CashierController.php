@@ -42,6 +42,7 @@ class CashierController extends Controller
             'name' => $request->name,
             'total_take_price' => $total_take_price,
             'total_price' => $total_price,
+            'amount_paid' => $request->amount_paid ?? 0,
             'date' => now()->format('Y-m-d'),
             'created_by' => Auth::user()->name,
         ]);

@@ -7,52 +7,54 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Nota Transaksi</title>
 
+    <link href="{{ asset('assets/fonts/fake-receipt/Fake Receipt Regular.ttf') }}" rel="stylesheet">
+
     <?php
     $style = '
-                    <style>
-                        * {
-                            font-family: "Fake Receipt", sans-serif;
-                            color: black;
-                            font-weight: bold;
-                        }
-                        p {
-                            display: block;
-                            margin: 3px;
-                            font-size: 10pt;
-                        }
-                        table td {
-                            font-size: 9pt;
-                        }
-                        .text-center {
-                            text-align: center;
-                        }
-                        .text-right {
-                            text-align: right;
-                        }
-                        @media print {
-                            @page {
-                                margin: 2px;
-                                size: 9cm
-                    ';
+                        <style>
+                            * {
+                                font-family: "Fake Receipt", sans-serif;
+                                color: black;
+                                font-weight: bold;
+                            }
+                            p {
+                                display: block;
+                                margin: 3px;
+                                font-size: 9pt;
+                            }
+                            table td {
+                                font-size: 8pt;
+                            }
+                            .text-center {
+                                text-align: center;
+                            }
+                            .text-right {
+                                text-align: right;
+                            }
+                            @media print {
+                                @page {
+                                    margin: 2px;
+                                    size: 7cm
+                        ';
 
     $style .= !empty($_COOKIE['innerHeight']) ? $_COOKIE['innerHeight'] . 'mm; }' : '}';
 
     $style .= '
-                                html, body {
-                                    width: 9cm;
+                                    html, body {
+                                        width: 7cm;
+                                    }
+                                    .btn-print {
+                                        display: none;
+                                    }
                                 }
-                                .btn-print {
-                                    display: none;
-                                }
-                            }
-                        </style>
-                        ';
+                            </style>
+                            ';
     ?>
 
     {!! $style !!}
 </head>
 
-<body onload="window.print()" style="width: 9cm;">
+<body onload="window.print()" style="width: 7cm;">
     <button class="btn-print" style="position: absolute; right: 1rem; top: rem;" onclick="window.print()">Print</button>
     <div class="text-center">
         <h3 style="margin-bottom: 5px;">{{ strtoupper($app->name ?? config('app.name')) }}</h3>
@@ -85,7 +87,7 @@
 
     <table width="100%" style="border: 0;">
         <tr>
-            <td>Total Harga:</td>
+            <td>Total Harga : </td>
             <td class="text-right">{{ rupiah($item->total_price) }}</td>
         </tr>
         {{-- <tr>
@@ -99,15 +101,15 @@
         <tr>
             <td>Total Bayar:</td>
             <td class="text-right">{{ rupiah($order->total_price - $order->discount) }}</td>
-        </tr>
-        <tr>
-            <td>Diterima:</td>
-            <td class="text-right">{{ rupiah($order->amount_paid) }}</td>
-        </tr>
-        <tr>
-            <td>Kembali:</td>
-            <td class="text-right">{{ rupiah($order->amount_paid - $order->total_price + $order->discount) }}</td>
         </tr> --}}
+        <tr>
+            <td>Diterima : </td>
+            <td class="text-right">{{ rupiah($item->amount_paid) }}</td>
+        </tr>
+        <tr>
+            <td>Kembali : </td>
+            <td class="text-right">{{ rupiah($item->amount_paid - $item->total_price) }}</td>
+        </tr>
     </table>
 
     <p class="text-center">===================================</p>

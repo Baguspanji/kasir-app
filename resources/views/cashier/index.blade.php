@@ -72,8 +72,18 @@
                                 </tbody>
                             </table>
 
-                            <button type="submit" class="btn btn-success btn-sm float-end"><i class="bi bi-cash"></i>
-                                Proses</button>
+                            <div class="row justify-content-between">
+                                <div class="col-6">
+                                    <input type="number" class="form-control @error('amount_paid') is-invalid @enderror"
+                                        name="amount_paid" value="{{ old('amount_paid', isset($post->amount_paid) ? $post->amount_paid : '') }}"
+                                        placeholder="Bayar">
+                                </div>
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-success btn-sm float-end mt-1"><i
+                                            class="bi bi-cash"></i>
+                                        Proses</button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>

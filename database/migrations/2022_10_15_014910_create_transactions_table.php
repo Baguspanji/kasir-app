@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('total_take_price');
             $table->integer('total_price');
+            $table->integer('amount_paid');
             $table->date('date');
             $table->string('created_by');
             $table->timestamps();
