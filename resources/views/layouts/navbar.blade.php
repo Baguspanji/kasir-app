@@ -45,7 +45,7 @@
                             <div class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                                     role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-fill"></i> Admin
+                                    <i class="bi bi-card-text"></i> Laporan
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     {{-- <li><a class="dropdown-item" href="{{ route('user.index') }}">User</a></li> --}}

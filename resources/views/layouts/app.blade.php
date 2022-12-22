@@ -4,51 +4,34 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.84.0">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css">
+    <!-- Scripts -->
+    @vite(['resources/sass/app.scss', 'resources/css/app.css', 'resources/js/app.js'])
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css">
+    <script src="{{ asset('assets/vendor/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/dataTables.bootstrap5.min.js') }}"></script>
 
-    <!-- Notyf -->
-    <link type="text/css" href="{{ asset('assets/vendor/notyf/notyf.min.css') }}" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-
-    <link href="{{ asset('assets/css/blog.css') }}" rel="stylesheet">
-
-    <!-- Custom javascript for this template -->
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-
-    <!-- Notyf -->
-    <script src="{{ asset('assets/vendor/notyf/notyf.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/notyf.min.js') }}"></script>
 
     @stack('style')
-
 </head>
 
 <body>
+    <div id="app">
+        @include('layouts.navbar')
 
-    @include('layouts.navbar')
-
-    @yield('content')
-
-    {{-- <footer class="blog-footer">
-        <p>Kasir App by <a href="https://github.com/Baguspanji">Bagus Panji</a>.</p>
-    </footer> --}}
+        @yield('content')
+    </div>
 
     <script>
         function rupiah(angka, prefix) {
@@ -58,17 +41,15 @@
                 ribuan = number_string.substr(sisa).match(/\d{3}/g);
 
             if (ribuan) {
-                separator = sisa ? '.' : '';
-                rupiah += separator + ribuan.join('.');
+                separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
             }
 
-            return 'Rp. ' + rupiah;
+            return "Rp. " + rupiah;
         }
     </script>
 
     @stack('script')
-
-
 
     @if ($error = Session::get('error'))
         <script>
@@ -144,7 +125,6 @@
             });
         </script>
     @endif
-
 </body>
 
 </html>

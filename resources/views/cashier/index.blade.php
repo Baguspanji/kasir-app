@@ -12,19 +12,18 @@
                 </div>
 
                 <div id="produk" class="row g-5">
-
                     <table id="dt" class="table w-100">
                         <thead>
                             <tr>
-                                <th>name</th>
-                                <th>gender</th>
-                                <th>email</th>
-                                <th>address</th>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>Unit</th>
+                                <th>Harga</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                     </table>
                 </div>
-
             </div>
 
             <div class="col-md-4">
@@ -59,7 +58,7 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Barang</th>
-                                        <th scope="col">Banyak</th>
+                                        <th scope="col">Qty</th>
                                         <th scope="col">Jumlah</th>
                                     </tr>
                                 </thead>
@@ -147,8 +146,9 @@
                                 '<div class="card shadow">' +
                                 '  <img src="./assets/images/dummy-image.jpg" class="card-img-top">' +
                                 '  <div class="card-body">' +
+                                `    <div class="card-text">${row.code}</div>` +
                                 `    <div class="card-text">${row.name}</div>` +
-                                // '    <div class="card-text">Porsi Besar</div>' +
+                                `    <div class="card-text">${row.unit}</div>` +
                                 '    <div class="d-flex justify-content-between">' +
                                 `      <span class="card-text">${rupiah(row.price)}</span>` +
                                 `      <button type="button" class="btn btn-primary btn-sm float-end" onclick="addCart(${row.id})"><i class="bi bi-cart-plus"></i></button>` +
@@ -159,7 +159,11 @@
                         }
                     },
                     {
+                        data: "image",
+                        data: "code",
                         data: "name",
+                        data: "unit",
+                        data: "price",
                         visible: false
                     }
                 ],
