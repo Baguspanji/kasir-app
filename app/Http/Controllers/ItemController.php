@@ -13,7 +13,6 @@ class ItemController extends Controller
     {
         $datas = Item::where([
             'app_id' => Auth::user()->app_id,
-            'type' => 'sell',
         ])
             ->orderBy('created_at', 'desc')
             ->get();
@@ -25,7 +24,6 @@ class ItemController extends Controller
     {
         $datas = Item::where([
             'app_id' => Auth::user()->app_id,
-            'type' => 'sell',
             'status' => true,
         ])
             ->orderBy('name', 'asc')
@@ -65,7 +63,6 @@ class ItemController extends Controller
 
         $dataCreated = array_merge($request->all(), [
             'app_id' => Auth::user()->app_id,
-            'type' => 'sell',
             'unit' => $request->per_unit . '/' . $request->unit,
         ]);
 

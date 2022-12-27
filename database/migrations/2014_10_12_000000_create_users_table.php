@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('pr_name');
             $table->boolean('status')->default(true);
+            $table->json('messages')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

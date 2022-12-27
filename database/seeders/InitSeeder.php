@@ -22,6 +22,10 @@ class InitSeeder extends Seeder
             'phone' => '123456789',
             'pr_name' => 'Panji',
             'status' => true,
+            'messages' => json_encode([
+                'Selamat Datang di Kasir Demo',
+                'Terima Kasih Telah Menggunakan Kasir Demo',
+            ]),
         ]);
 
         DB::table('users')->insert([
@@ -64,7 +68,6 @@ class InitSeeder extends Seeder
                 'code' => 'BRG-001',
                 'name' => 'Susu Murni',
                 'unit' => '100/gram',
-                'type' => 'sell',
                 'take_price' => 8000,
                 'price' => 11000,
             ],
@@ -72,7 +75,6 @@ class InitSeeder extends Seeder
                 'code' => 'BRG-002',
                 'name' => 'Kentang',
                 'unit' => '100/gram',
-                'type' => 'sell',
                 'take_price' => 3000,
                 'price' => 4500,
             ],
@@ -80,7 +82,6 @@ class InitSeeder extends Seeder
                 'code' => 'BRG-003',
                 'name' => 'Kopi Bubuk Dampit',
                 'unit' => '100/gram',
-                'type' => 'sell',
                 'take_price' => 4000,
                 'price' => 5500,
             ],
@@ -88,7 +89,6 @@ class InitSeeder extends Seeder
                 'code' => 'BRG-004',
                 'name' => 'Mie Sedap Campur',
                 'unit' => '1/pack',
-                'type' => 'sell',
                 'take_price' => 89000,
                 'price' => 98000,
             ],
@@ -96,7 +96,6 @@ class InitSeeder extends Seeder
                 'code' => 'BRG-005',
                 'name' => 'Sosis Ayam',
                 'unit' => '1/pcs',
-                'type' => 'sell',
                 'take_price' => 1500,
                 'price' => 2000,
             ],

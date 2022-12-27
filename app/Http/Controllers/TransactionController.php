@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
-use Illuminate\Http\Request;
+use App\Models\TransactionDetail;
 use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
@@ -21,33 +21,17 @@ class TransactionController extends Controller
         return view('transaction.index', compact('datas'));
     }
 
-    public function create()
+    // income
+    public function income()
     {
-        //
-    }
+        $datas = TransactionDetail::with([
+            'item',
+            'transaction'
+        ])
+            ->Where([
+                'app_id' => Auth::user()->app_id,
+            ])->get();
 
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
+        return view('transaction.income', compact('datas'));
     }
 }

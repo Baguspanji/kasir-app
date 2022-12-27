@@ -1,11 +1,11 @@
 <div class="container">
     <header class="blog-header py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
-            <!-- <div class="col-4 pt-1">
-    <a class="link-secondary" href="#">Subscribe</a>
-  </div> -->
+            {{-- <div class="col-4 pt-1">
+                <a class="link-secondary" href="#">Subscribe</a>
+            </div> --}}
             <div class="col-8">
-                <a class="blog-header-logo text-dark" href="#">{{ config('app.name', 'Laravel') }}</a>
+                <a class="blog-header-logo text-dark" href="#">{{ auth()->user()->app->name }}</a>
             </div>
             <div class="col-4 d-flex justify-content-end align-items-center">
                 <a class="btn btn-sm btn-outline-secondary" href="{{ route('logout') }}"
@@ -53,16 +53,18 @@
                                         <hr class="dropdown-divider">
                                     </li> --}}
                                     <li>
-                                        <a class="dropdown-item {{ request()->is('transaction*') ? 'active' : '' }}"
+                                        <a class="dropdown-item {{ request()->is('transaction') ? 'active' : '' }}"
                                             href="{{ route('transaction.index') }}">Transaksi</a>
                                     </li>
-                                    <li><a class="dropdown-item" href="#">Pemasukan</a></li>
+                                    <li><a class="dropdown-item {{ request()->is('transaction/income') ? 'active' : '' }}"
+                                            href="{{ route('transaction.income') }}">Pemasukan</a></li>
                                     {{-- <li><a class="dropdown-item" href="#">Pengeluaran</a></li> --}}
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
                                     {{-- <li><a class="dropdown-item" href="#">Master Data</a></li> --}}
-                                    <li><a class="dropdown-item" href="#">Pengaturan Toko</a></li>
+                                    <li><a class="dropdown-item {{ request()->is('setting*') ? 'active' : '' }}"
+                                            href="{{ route('setting') }}">Pengaturan Toko</a></li>
                                 </ul>
                             </div>
                         @endcan

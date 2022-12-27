@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('app_id');
             $table->foreignIdFor(Transaction::class)->constrained();
             $table->foreignIdFor(Item::class)->constrained();
-            $table->string('take_price');
+            $table->integer('take_price');
             $table->integer('price');
             $table->integer('quantity');
             $table->timestamps();

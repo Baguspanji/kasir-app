@@ -13,9 +13,11 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Tanggal</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col">Total Pembelian</th>
-                                    <th scope="col">Detail Barang</th>
+                                    <th scope="col">Nama Barang</th>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Harga Beli</th>
+                                    <th scope="col">Harga Jual</th>
+                                    <th scope="col">Laba</th>
                                     {{-- <th scope="col">Aksi</th> --}}
 
                                 </tr>
@@ -24,15 +26,12 @@
                                 @foreach ($datas as $key => $item)
                                     <tr id="table-data">
                                         <th scope="row">{{ ++$key }}</th>
-                                        <td>{{ tanggalDate($item->date) }}</td>
-                                        <td>{{ $item->name ?? '-' }}</td>
-                                        <td>{{ $item->total_price == 0 ? '-' : rupiah($item->total_price) }}</td>
-                                        <td>
-                                            @foreach ($item->details as $detail)
-                                                <li>
-                                                    {{ $detail->item->name }} - {{ $detail->quantity }}
-                                                </li>
-                                            @endforeach
+                                        <td>{{ tanggalDate($item->transaction->date) }}</td>
+                                        <td>{{ $item->item->name ?? '-' }}</td>
+                                        <td>{{ $item->quantity }}</td>
+                                        <td>{{ rupiah($item->take_price) }}</td>
+                                        <td>{{ rupiah($item->price) }}</td>
+                                        <td>{{ rupiah($item->price * $item->quantity - $item->take_price * $item->quantity) }}
                                         </td>
                                         {{-- <td></td> --}}
                                     </tr>

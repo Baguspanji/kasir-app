@@ -16,30 +16,8 @@ class AuthRole
      */
     public function handle(Request $request, Closure $next, string $auth)
     {
-        $authLevel = [
-            'employee' => [
-                'admin',
-                'employee',
-            ],
-            'admin' => [
-                'admin',
-            ],
-        ];
-
-        $authLevels = [];
-        foreach (explode('-', $auth) as $key => $value) {
-            if ($key == 0) {
-                $authLevels = $authLevel[$value] ?? [];
-            } else {
-                foreach ($authLevel[$value] ?? [] as $role) {
-                    array_push($authLevels, $role);
-                }
-                // array_merge($authLevels, $authLevel[$value] ?? []);
-            }
-        }
-
         $inRole = false;
-        if (in_array(auth()->user()->role, $authLevels)) {
+        if (auth()->user()->role == $auth) {
             $inRole = true;
         }
 

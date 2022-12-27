@@ -15,15 +15,18 @@ Route::controller(LoginController::class)->group(function () {
     Route::post('/logout', 'logout')->name('logout');
 });
 
-Route::group(['middleware' => ['auth', 'role:employee']], function () {
+Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/setting', [HomeController::class, 'setting'])->name('setting');
+    Route::post('/setting', [HomeController::class, 'updateSetting'])->name('setting.update');
 
     Route::resource('cashier', CashierController::class);
 
     Route::resource('item', ItemController::class);
     Route::get('/item/{item}/status', [ItemController::class, 'status'])->name('item.status');
 
-    Route::resource('transaction', TransactionController::class);
+    Route::get('transaction', [TransactionController::class, 'index'])->name('transaction.index');
+    Route::get('transaction/income', [TransactionController::class, 'income'])->name('transaction.income');
 });
 
 Route::get('/ajax/item', [ItemController::class, 'ajax'])->name('item.ajax');

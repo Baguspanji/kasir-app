@@ -17,15 +17,12 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('app_id');
-            $table->foreignIdFor(Category::class)->nullable()->constrained();
             $table->string('code')->nullable();
             $table->string('name');
             $table->string('unit')->nullable();
-            $table->enum('type', ['storage', 'sell'])->default('sell');
             $table->integer('stock')->nullable();
             $table->integer('take_price')->default(0);
             $table->integer('price')->default(0);
-            $table->json('needs')->nullable();
             $table->string('image')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();

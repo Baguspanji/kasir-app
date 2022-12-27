@@ -11,4 +11,8 @@ class App extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'messages' => 'array',
+    ];
 }
