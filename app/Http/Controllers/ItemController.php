@@ -84,8 +84,10 @@ class ItemController extends Controller
             'app_id' => Auth::user()->app_id,
         ])->first();
 
-        $post->per_unit = explode('/', $post->unit)[0];
-        $post->unit = explode('/', $post->unit)[1];
+        $explode = explode('/', $post->unit);
+
+        $post->per_unit = count($explode) < 1 ? $explode[0] : 1;
+        $post->unit = count($explode) < 1 ? $explode[1] : $post->unit;
 
         return view('item.form', compact('post'));
     }
@@ -104,7 +106,9 @@ class ItemController extends Controller
             'app_id' => Auth::user()->app_id,
         ])->first();
 
-        $dataEdited = $request->all();
+        $dataEdited = array_merge($request->all(), [
+            'unit' => $request->per_unit . '/' . $request->unit,
+        ]);
 
         $data->update($dataEdited);
 

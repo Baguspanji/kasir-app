@@ -80,12 +80,13 @@ class AuthController extends Controller
 
     public function user()
     {
-        $user = static::findUser();
-
+        $user = static::findUser()->load('app');
         $respon = [
-            'message' => 'Success',
+            'status' => 'success',
+            'message' => 'Data user',
             'data' => $user,
         ];
+
         return response()->json($respon, 200);
     }
 
