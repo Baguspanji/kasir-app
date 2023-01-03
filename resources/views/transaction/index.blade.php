@@ -29,8 +29,13 @@
                                         <td>{{ $item->total_price == 0 ? '-' : rupiah($item->total_price) }}</td>
                                         <td>
                                             @foreach ($item->details as $detail)
+                                                @php
+                                                    $per_unit = explode('/', $detail->item->unit)[0];
+                                                    $unit = explode('/', $detail->item->unit)[1];
+                                                @endphp
                                                 <li>
-                                                    {{ $detail->item->name }} - {{ $detail->quantity }}
+                                                    {{ $detail->item->name }} -
+                                                    {{ $detail->quantity * (int) $per_unit }}/{{ $unit }}
                                                 </li>
                                             @endforeach
                                         </td>

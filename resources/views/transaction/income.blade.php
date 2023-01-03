@@ -27,7 +27,7 @@
                                     <tr id="table-data">
                                         <th scope="row">{{ ++$key }}</th>
                                         <td>{{ tanggalDate($item->transaction->date) }}</td>
-                                        <td>{{ $item->item->name ?? '-' }}</td>
+                                        <td>{{ $item->item->name ?? '-' }} - {{ $item->item->unit ?? '-' }}</td>
                                         <td>{{ $item->quantity }}</td>
                                         <td>{{ rupiah($item->take_price) }}</td>
                                         <td>{{ rupiah($item->price) }}</td>
