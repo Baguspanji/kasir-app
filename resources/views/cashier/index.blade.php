@@ -195,7 +195,7 @@
 
         function addToCart(id, name, price) {
             var qty = $('.qty-' + id).val()
-            var total = parseInt($('#total-value').val()) + price;
+            var total = parseInt($('#total-value').val()) + parseInt(price);
 
             if (qty != null) {
                 $('.qty-' + id).val(++qty)
