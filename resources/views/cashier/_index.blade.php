@@ -22,7 +22,6 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
                     </table>
                 </div>
             </div>
@@ -75,8 +74,7 @@
                             <div class="row justify-content-between">
                                 <div class="col-6">
                                     <input type="number" class="form-control @error('amount_paid') is-invalid @enderror"
-                                        name="amount_paid"
-                                        value="{{ old('amount_paid', isset($post->amount_paid) ? $post->amount_paid : '') }}"
+                                        name="amount_paid" value="{{ old('amount_paid', isset($post->amount_paid) ? $post->amount_paid : '') }}"
                                         placeholder="Bayar">
                                 </div>
                                 <div class="col-4">
@@ -95,7 +93,7 @@
     </main>
 @endsection
 
-{{-- @push('style')
+@push('style')
     <style>
         #dt.dataTable.no-footer {
             border-bottom: unset;
@@ -123,7 +121,7 @@
             height: 180px;
         }
     </style>
-@endpush --}}
+@endpush
 
 @push('script')
     <script type="text/javascript">
@@ -137,42 +135,46 @@
                 deferRender: true,
                 processing: true,
                 // language: {
-                //     paginate: {
-                //         previous: "",
-                //         next: ">"
-                //     },
+                //   paginate: {
+                //     previous: "<",
+                //     next: ">"
+                //   },
                 // },
                 columns: [{
-                        data: 'code',
-                        name: 'code'
-                    },
-                    {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'unit',
-                        name: 'unit'
-                    },
-                    {
-                        data: 'price',
-                        name: 'price',
-                        render: function(data, type, row) {
-                            return rupiah(row.price);
+                        render: function(data, type, row, meta) {
+                            var html =
+                                '<div class="card shadow">' +
+                                `  <img src="${row.image ?? './assets/images/dummy-image.jpg'}" class="card-img-top">` +
+                                '  <div class="card-body">' +
+                                `    <div class="card-text">${row.code}</div>` +
+                                `    <div class="card-text">${row.name}</div>` +
+                                `    <div class="card-text">${row.unit}</div>` +
+                                '    <div class="d-flex justify-content-between">' +
+                                `      <span class="card-text">${rupiah(row.price)}</span>` +
+                                `      <button type="button" class="btn btn-primary btn-sm float-end" onclick="addCart(${row.id})"><i class="bi bi-cart-plus"></i></button>` +
+                                '    </div>' +
+                                '  </div>' +
+                                '</div>';
+                            return html;
                         }
                     },
                     {
-                        data: 'id',
-                        name: 'id',
-                        render: function(data, type, row) {
-                            return '<button class="btn btn-sm btn-primary" onclick="addCart(' + row
-                                .id + ')"><i class="bi bi-cart-plus"></i></button>';
-                        }
-                    },
-                ]
+                        data: "image",
+                        data: "code",
+                        data: "name",
+                        data: "unit",
+                        data: "price",
+                        visible: false
+                    }
+                ],
             });
 
-            // $("#dt thead").hide();
+            dt.on('draw', function(data) {
+                $('#dt tbody').addClass('row');
+                $('#dt tbody tr').addClass('col-md-3 col-sm-12');
+            });
+
+            $("#dt thead").hide();
             $('#dt_filter').hide();
 
             $('#search').keyup(function() {
