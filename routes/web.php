@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
 
     Route::get('transaction', [TransactionController::class, 'index'])->name('transaction.index');
     Route::get('transaction/income', [TransactionController::class, 'income'])->name('transaction.income');
+    Route::get('transaction/income/export', [TransactionController::class, 'export'])->name('transaction.export');
 });
 
 Route::get('/ajax/item', [ItemController::class, 'ajax'])->name('item.ajax');

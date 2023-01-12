@@ -6,6 +6,19 @@
         <div class="row g-5 mb-4">
             <div class="col-md-12">
 
+                @can('is_admin')
+                    <form class="row justify-content-end" action="{{ route('transaction.export') }}" method="GET">
+                        <div class="col-md-2">
+                            <input class="form-control bg-white" type="month" name="month" id="month">
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-primary float-end">
+                                <i class="bi bi-plus-lg"></i> Export
+                            </button>
+                        </div>
+                    </form>
+                @endcan
+
                 <div class="card mt-2">
                     <div class="card-body">
                         <table class="table" id="dt">
