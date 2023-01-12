@@ -144,7 +144,7 @@
                         render: function(data, type, row, meta) {
                             var html =
                                 '<div class="card shadow">' +
-                                '  <img src="./assets/images/dummy-image.jpg" class="card-img-top">' +
+                                `  <img src="${row.image ?? './assets/images/dummy-image.jpg'}" class="card-img-top">` +
                                 '  <div class="card-body">' +
                                 `    <div class="card-text">${row.code}</div>` +
                                 `    <div class="card-text">${row.name}</div>` +

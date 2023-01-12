@@ -135,7 +135,42 @@
                                 @enderror
                             </div>
 
+                            <div class="mb-4">
+                                <div class="form-group">
+                                    <label>Gambar</label>
+                                    <div class="row justify-content-center py-3">
+                                        <div class="card shadow-none card-upload mx-1 my-1 col-4" id="btn-upload">
+                                            <div class="card-body align-items-center d-flex justify-content-center dropzone"
+                                                id="dropzone">
+                                                <div class="text-center">
+                                                    <p>Drag and Drop</p>
+                                                    <label class="btn btn-outline-primary btn-sm">
+                                                        Choose File
+                                                        <input type="file" class="account-settings-fileinput"
+                                                            id="fileInp">
+                                                    </label> &nbsp;
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="progress" style="display:none">
+                                    <div id="progressBar" class="progress-bar bg-success" role="progressbar"
+                                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                        <span class="sr-only">0%</span>
+                                    </div>
+                                </div>
+
+                                <div class="error"></div>
+
+                                @error('image')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <div class="my-4 d-flex justify-content-center">
+                                <input type="hidden" name="image" id="image">
                                 <button type="submit"
                                     class="btn btn-{{ isset($post) ? 'warning' : 'primary' }} w-50">{{ isset($post) ? 'Update' : 'Simpan' }}</button>
                             </div>
@@ -149,9 +184,193 @@
     </main>
 @endsection
 
+@push('style')
+    <style>
+        #table_filter input {
+            border-radius: 6px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .dataTables_paginate {
+            padding-top: 20px;
+        }
+
+        .paginate_button {
+            margin-left: 10px;
+            display: inline;
+        }
+
+        img {
+            width: 260px;
+            /* height: 260px; */
+        }
+
+        .card-upload {
+            width: 260px;
+            height: 260px;
+            padding: 10px;
+        }
+
+        .child {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .child-center {
+            position: absolute;
+        }
+
+        .child-bottom {
+            position: absolute;
+            bottom: 20px;
+        }
+
+        .child-title {
+            position: absolute;
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+            bottom: 20px;
+            text-align: center;
+        }
+
+        .parent {
+            position: relative;
+        }
+
+        .dropzone {
+            background-color: rgb(248, 248, 248);
+            border: 2px dashed rgba(155, 155, 155, 0.500);
+        }
+
+        .dropzone:hover,
+        .dropzone-hover {
+            background-color: #ddd;
+            border-color: #3070a577;
+            border-style: solid;
+        }
+
+        .account-settings-fileinput {
+            position: absolute;
+            visibility: hidden;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+    </style>
+@endpush
+
 @push('script')
-    <script type="text/javascript">
-        // set per_unit 1
-        $('#per_unit').val(1);
+    <script>
+        var i = 0;
+
+        function addfile(file) {
+            var value = '' +
+                `<div class="parent card shadow-none card-upload path col-4">` +
+                '    <div class="card-body align-items-center d-flex justify-content-center dropzone">' +
+                `       <img src="${file}"` +
+                '           class="img-thumbnail" alt="...">' +
+                `       <a class="btn btn-danger btn-sm child" onClick="btn_path()"><i class="bi bi-trash"></i></a>` +
+                '    </div>' +
+                '</div>' +
+                '';
+            $(value).insertBefore("#btn-upload");
+            $("#btn-upload").hide();
+            $("#image").val(file);
+        }
+
+        function btn_path(id) {
+            var path = $(`#path`).val()
+            $(`.path`).remove()
+            $("#btn-upload").show();
+            $("#image").val('');
+        }
+
+        function file_upload(file) {
+            var formData = new FormData();
+            formData.append("file", file);
+            formData.append("type", 'items');
+            $.ajax({
+                type: 'POST',
+                url: "{{ url('api/upload/') }}",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function(res) {
+                    addfile(res);
+                    $('.error').empty()
+                },
+                error: function(res) {
+                    var err = eval("(" + res.responseText + ")");
+                    err.error.file.forEach(e => {
+                        $('.error').append(`<div class="text-danger mt-2">${e}</div>`)
+                    });
+                    $('.progress').hide();
+                },
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener('progress', function(e) {
+                        if (e.lengthComputable) {
+                            var percent = Math.round((e.loaded / e.total) * 100);
+                            $('#progressBar').attr('aria-valuenow', percent).css('width',
+                                percent + '%').text(percent + '%');
+                            if (percent === 100) {
+                                $('.progress').hide();
+                            }
+                        }
+                    });
+                    return xhr;
+                },
+            });
+        }
+        $("input[type=file]").change(function(event) {
+            var file = $("#fileInp")[0].files[0];
+            file_upload(file);
+        });
+        (function() {
+            function Init() {
+                var fileDrag = document.getElementById('dropzone');
+                // Is XHR2 available?
+                var xhr = new XMLHttpRequest();
+                if (xhr.upload) {
+                    // File Drop
+                    fileDrag.addEventListener('dragover', fileDragHover, false);
+                    fileDrag.addEventListener('dragleave', fileDragHover, false);
+                    fileDrag.addEventListener('drop', fileSelectHandler, false);
+                }
+            }
+
+            function fileDragHover(e) {
+                var fileDrag = document.getElementById('dropzone');
+                e.stopPropagation();
+                e.preventDefault();
+                if (e.type === 'dragover') {
+                    fileDrag.classList.add("dropzone-hover")
+                } else {
+                    fileDrag.classList.remove("dropzone-hover")
+                }
+            }
+
+            function fileSelectHandler(e) {
+                // Fetch FileList object
+                var files = e.target.files || e.dataTransfer.files;
+                // Cancel event and hover styling
+                fileDragHover(e);
+                // Process all File objectslet type = prompt('Type File Name');
+                file_upload(files[0])
+            }
+            // Check for the various File API support.
+            if (window.File && window.FileList && window.FileReader) {
+                Init();
+            }
+        })();
+        var files = <?= json_encode(old('image', isset($post['image']) ? $post['image'] : '')) ?>;
+        if (files != '' && files != null) {
+            addfile(files);
+        }
     </script>
 @endpush

@@ -22,7 +22,7 @@
                             <thead class="text-center">
                                 <tr>
                                     <th scope="col">#</th>
-                                    {{-- <th scope="col" style="width: 100px;">Gambar</th> --}}
+                                    <th scope="col" style="width: 100px;">Gambar</th>
                                     <th scope="col">Kode</th>
                                     <th scope="col">Barang</th>
                                     <th scope="col">Unit</th>
@@ -36,10 +36,11 @@
                                 @foreach ($datas as $key => $item)
                                     <tr id="table-data">
                                         <th scope="row">{{ ++$key }}</th>
-                                        {{-- <td>
-                                            <img src="{{ asset('assets/images/bakso.jpg') }}" class="rounded"
-                                                alt="...">
-                                        </td> --}}
+                                        <td>
+                                            @if ($item->image)
+                                                <img src="{{ $item->image }}" class="rounded" alt="...">
+                                            @endif
+                                        </td>
                                         <td>{{ $item->code ?? '-' }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ Str::ucfirst($item->unit) }}</td>
@@ -55,8 +56,8 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('item.edit', $item->id) }}"
-                                                class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
+                                            <a href="{{ route('item.edit', $item->id) }}" class="btn btn-warning btn-sm"><i
+                                                    class="bi bi-pencil-square"></i> Edit</a>
                                         </td>
                                     </tr>
                                 @endforeach
