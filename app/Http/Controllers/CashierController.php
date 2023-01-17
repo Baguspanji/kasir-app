@@ -71,12 +71,17 @@ class CashierController extends Controller
 
         $transaction->details()->createMany($detailCreated);
 
-        $this->print($transaction->id);
+        return [
+            'status' => true,
+            'message' => 'Transaksi berhasil',
+            'data' => $transaction->id,
+        ];
 
-        return redirect()->route('cashier.index');
+        // $this->print($transaction->id);
+        // return redirect()->route('cashier.index', 'transaction=' . $transaction->id);
     }
 
-    public function show($id)
+    public function print($id)
     {
         $app = App::where([
             'id' => Auth::user()->app_id,
@@ -98,7 +103,7 @@ class CashierController extends Controller
         // return $pdf->stream('Transaksi-' . date('Y-m-d-his') . '.pdf');
     }
 
-    private function print($id)
+    public function show($id)
     {
         $app = App::where([
             'id' => Auth::user()->app_id,
@@ -147,16 +152,21 @@ class CashierController extends Controller
             }, $item->details->toArray()),
         ];
 
-        // curl localhost 8005
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://localhost:8005');
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($sendToPrint));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $server_output = curl_exec($ch);
-        curl_close($ch);
+        return [
+            'status' => 'success',
+            'data' => $sendToPrint,
+        ];
 
-        return $server_output;
+        // curl localhost 8005
+        // $ch = curl_init();
+        // curl_setopt($ch, CURLOPT_URL, 'http://localhost:8005');
+        // curl_setopt($ch, CURLOPT_POST, 1);
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($sendToPrint));
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // $server_output = curl_exec($ch);
+        // curl_close($ch);
+
+        // return $server_output;
     }
 
     public function edit($id)

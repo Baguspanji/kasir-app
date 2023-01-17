@@ -40,7 +40,7 @@
                 @endif
 
                 <div class="position-sticky" style="top: 2rem;">
-                    <form id="formSubmit" action="{{ route('cashier.store') }}" method="POST">
+                    <form id="formSubmit">
                         @csrf
 
                         <div class="p-4 pb-5 bg-light rounded">
@@ -257,6 +257,62 @@
             $('#total-value').val(total);
 
             $(`.item-${id}`).remove()
+        }
+
+        function clearItem() {
+            var cartTotal = $('.cart-total')
+            cartTotal.siblings().remove()
+            $('#total').html(rupiah(0));
+            $('#total-value').val(0);
+        }
+
+        $('#formSubmit').submit(function(e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var token = $('meta[name="csrf-token"]').attr('content');
+            form.append('<input type="hidden" name="_token" value="' + token + '">');
+            var url = '{{ route('cashier.store') }}';
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function(response) {
+                    var res = response
+
+                    getData(res.data)
+                },
+                error: function(xhr) {
+                    var res = xhr.responseJSON
+                    if ($.isEmptyObject(res) == false) {}
+                }
+            });
+        });
+
+        function getData(id) {
+            $.ajax({
+                url: "{{ url('cashier') }}" + '/' + id,
+            }).done(function(response) {
+                var res = response.data
+
+                print(res)
+            });
+        }
+
+        function print(response) {
+            // ajax json
+            $.ajax({
+                url: "http://localhost:8005",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: response,
+                success: function(response) {
+                    var res = response
+                    console.log(res);
+                }
+            });
         }
     </script>
 @endpush
