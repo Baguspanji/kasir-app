@@ -135,7 +135,7 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-4">
+                            {{-- <div class="mb-4">
                                 <div class="form-group">
                                     <label>Gambar</label>
                                     <div class="row justify-content-center py-3">
@@ -167,10 +167,10 @@
                                 @error('image')
                                     <div class="text-danger mt-2">{{ $message }}</div>
                                 @enderror
-                            </div>
+                            </div> --}}
 
                             <div class="my-4 d-flex justify-content-center">
-                                <input type="hidden" name="image" id="image">
+                                {{-- <input type="hidden" name="image" id="image"> --}}
                                 <button type="submit"
                                     class="btn btn-{{ isset($post) ? 'warning' : 'primary' }} w-50">{{ isset($post) ? 'Update' : 'Simpan' }}</button>
                             </div>
@@ -264,7 +264,7 @@
 @endpush
 
 @push('script')
-    <script>
+    {{-- <script>
         var i = 0;
 
         function addfile(file) {
@@ -372,5 +372,5 @@
         if (files != '' && files != null) {
             addfile(files);
         }
-    </script>
+    </script> --}}
 @endpush
