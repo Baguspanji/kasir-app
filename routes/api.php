@@ -21,7 +21,7 @@ Route::group(['middleware' => ['auth:users']], function () {
     Route::get('/dashboard', [HomeController::class, 'index']);
 
     Route::apiResource('item', ItemController::class)->except(['destroy']);
-    Route::post('item/{item}/status', [ItemController::class, 'status']);
+    // Route::post('item/{item}/status', [ItemController::class, 'status']);
 
     Route::apiResource('transaction', TransactionController::class)->except(['update', 'destroy']);
     Route::get('transaction-income/', [TransactionController::class, 'income']);

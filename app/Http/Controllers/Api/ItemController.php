@@ -14,11 +14,16 @@ class ItemController extends Controller
     public function index()
     {
         $status = request()->query('status') ?? true;
+        $keyword = request()->query('keyword') ?? null;
 
         $datas = Item::where([
             'app_id' => Auth::user()->app_id,
             'status' => $status,
-        ]);
+        ])->when(!is_null($keyword),
+            fn($q) =>
+            $q->where('code', 'like', '%' . $keyword . '%')
+                ->orWhere('name', 'like', '%' . $keyword . '%')
+        );
 
         $response = [
             'message' => 'Berhasil mendapat data item',
