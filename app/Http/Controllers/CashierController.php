@@ -125,34 +125,38 @@ class CashierController extends Controller
         $amount_paid = $item->amount_paid;
         $total_price = $item->total_price;
 
-        // Init printer
-        $printer = new ReceiptPrinter;
-        $printer->init(
-            config('receiptprinter.connector_type'),
-            config('receiptprinter.connector_descriptor')
-        );
+        $sendToPrint =  [
+            'store_name' => $store_name,
+            'store_address' => $store_address,
+            'store_phone' => $store_phone,
+            'store_email' => $store_email,
+            'store_website' => $store_website,
+            'buyer_name' => $buyer_name,
+            'currency' => $currency,
+            'tax_percentage' => $tax_percentage,
+            'image_path' => $image_path,
+            'amount_paid' => $amount_paid,
+            'total_price' => $total_price,
+            'items' => array_map(function ($item) {
+                return [
+                    'name' => $item['item']['name'],
+                    'unit' => $item['item']['unit'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                ];
+            }, $item->details->toArray()),
+        ];
 
-        // Set store info
-        $printer->setStore($store_name, $store_address, $store_phone, $store_email, $store_website);
-        $printer->setBuyer($buyer_name);
-        $printer->setCurrency($currency);
-        $printer->setRequestAmount($total_price);
-        $printer->setAmountPaid($amount_paid);
-        $printer->setTax($tax_percentage);
+        // curl localhost 8005
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'http://localhost:8005');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($sendToPrint));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec($ch);
+        curl_close($ch);
 
-        // Add items
-        foreach ($item->details as $detail) {
-            $printer->addItem(
-                $detail->item->name,
-                $detail->quantity,
-                $detail->price,
-            );
-        }
-
-        $printer->calculateGrandTotal();
-
-        // Print receipt
-        $printer->printReceipt();
+        return $server_output;
     }
 
     public function edit($id)
