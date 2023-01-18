@@ -77,7 +77,7 @@ class ReportExport implements FromCollection, WithHeadings, ShouldAutoSize, With
         ];
 
         $row0 = [
-            'Bulan    : ' . $this->month,
+            'Tanggal    : ' . $this->month,
             '',
             '',
             '',

@@ -9,7 +9,13 @@
                 @can('is_admin')
                     <form class="row justify-content-end" action="{{ route('transaction.export') }}" method="GET">
                         <div class="col-md-2">
-                            <input class="form-control bg-white" type="month" name="month" id="month">
+                            <select class="form-select" name="type" id="type">
+                                <option value="daily">Harian</option>
+                                <option value="monthly">Bulanan</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input class="form-control bg-white" type="date" name="date" id="date">
                         </div>
                         <div class="col-md-1">
                             <button type="submit" class="btn btn-primary float-end">
@@ -74,6 +80,14 @@
             $('#addStokBtn').click(function() {
                 $('#addStok').modal('show');
             })
+        });
+
+        $('#type').on('change', function() {
+            if (this.value == 'daily') {
+                $('#date').attr('type', 'date');
+            } else {
+                $('#date').attr('type', 'month');
+            }
         });
     </script>
 @endpush

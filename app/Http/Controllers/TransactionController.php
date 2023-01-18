@@ -42,18 +42,26 @@ class TransactionController extends Controller
 
     public function export(Request $request)
     {
-        $month = Carbon::createFromDate($request->month ?? now());
+        $date = Carbon::createFromDate($request->date ?? now());
+        $type = $request->type ?? 'daily';
         $app = App::findOrFail(Auth::user()->app_id);
 
         $transaction = TransactionDetail::with([
             'item',
             'transaction',
         ])
-            ->whereHas('transaction', function ($query) use ($month) {
-                $query->whereBetween('date', [
-                    $month->startOfMonth()->format('Y-m-d'),
-                    $month->endOfMonth()->format('Y-m-d'),
-                ]);
+            ->when($type == 'daily', function ($query) use ($date) {
+                $query->whereHas('transaction', function ($query) use ($date) {
+                    $query->whereDate('date', $date->format('Y-m-d'));
+                });
+            })
+            ->when($type == 'monthly', function ($query) use ($date) {
+                $query->whereHas('transaction', function ($query) use ($date) {
+                    $query->whereBetween('date', [
+                        $date->startOfMonth()->format('Y-m-d'),
+                        $date->endOfMonth()->format('Y-m-d'),
+                    ]);
+                });
             })
             ->where([
                 'app_id' => Auth::user()->app_id,
@@ -71,9 +79,16 @@ class TransactionController extends Controller
             ];
         }
 
-        $ex = explode(' ', $month);
-        $bulan = bulan(substr($ex[0], 5, 2));
-        $tahun = substr($ex[0], 0, 4);
+        if ($type == 'daily') {
+            $ex = explode(' ', $date);
+            $tanggal = substr($ex[0], 8, 2);
+            $bulan = $tanggal . ' ' . bulan(substr($ex[0], 5, 2));
+            $tahun = substr($ex[0], 0, 4);
+        } else {
+            $ex = explode(' ', $date);
+            $bulan = bulan(substr($ex[0], 5, 2));
+            $tahun = substr($ex[0], 0, 4);
+        }
 
         // return $dataExport;
         $export = new ReportExport($dataExport, $bulan . ' ' . $tahun, $app->address, $app->name);
