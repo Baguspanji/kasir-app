@@ -9,49 +9,49 @@
 
     <?php
     $style = '
-                        <style>
-                            @font-face {
-                                font-family: "Fake Receipt";
-                                src: url("{{ asset("assets/fonts/fake-receipt/Fake Receipt Regular.ttf") }}");
-                            }
+                            <style>
+                                @font-face {
+                                    font-family: "Fake Receipt";
+                                    src: url("{{ asset("assets/fonts/fake-receipt/Fake Receipt Regular.ttf") }}");
+                                }
 
-                            * {
-                                font-family: "Fake Receipt", sans-serif;
-                                color: black;
-                                font-weight: bold;
-                            }
-                            p {
-                                display: block;
-                                margin: 3px;
-                                font-size: 7pt;
-                            }
-                            table td {
-                                font-size: 6pt;
-                            }
-                            .text-center {
-                                text-align: center;
-                            }
-                            .text-right {
-                                text-align: right;
-                            }
-                            @media print {
-                                @page {
+                                * {
+                                    font-family: "Fake Receipt", sans-serif;
+                                    color: black;
+                                    font-weight: bold;
+                                }
+                                p {
+                                    display: block;
                                     margin: 3px;
-                                    size: 54mm
-                        ';
+                                    font-size: 7pt;
+                                }
+                                table td {
+                                    font-size: 6pt;
+                                }
+                                .text-center {
+                                    text-align: center;
+                                }
+                                .text-right {
+                                    text-align: right;
+                                }
+                                @media print {
+                                    @page {
+                                        margin: 3px;
+                                        size: 54mm
+                            ';
 
     $style .= !empty($_COOKIE['innerHeight']) ? $_COOKIE['innerHeight'] . 'mm; }' : '}';
 
     $style .= '
-                                    html, body {
-                                        width: 54mm;
+                                        html, body {
+                                            width: 54mm;
+                                        }
+                                        .btn-print {
+                                            display: none;
+                                        }
                                     }
-                                    .btn-print {
-                                        display: none;
-                                    }
-                                }
-                            </style>
-                            ';
+                                </style>
+                                ';
     ?>
 
     {!! $style !!}
@@ -93,26 +93,16 @@
             <td>Total Harga : </td>
             <td class="text-right">{{ rupiah($item->total_price) }}</td>
         </tr>
-        {{-- <tr>
-            <td>Total Item:</td>
-            <td class="text-right">{{ rupiah($item->total_take_price) }}</td>
-        </tr>
-        <tr>
-            <td>Diskon:</td>
-            <td class="text-right">{{ rupiah($order->discount) }}</td>
-        </tr>
-        <tr>
-            <td>Total Bayar:</td>
-            <td class="text-right">{{ rupiah($order->total_price - $order->discount) }}</td>
-        </tr> --}}
-        <tr>
-            <td>Diterima : </td>
-            <td class="text-right">{{ rupiah($item->amount_paid) }}</td>
-        </tr>
-        <tr>
-            <td>Kembali : </td>
-            <td class="text-right">{{ rupiah($item->amount_paid - $item->total_price) }}</td>
-        </tr>
+        @if ($item->amount_paid)
+            <tr>
+                <td>Diterima : </td>
+                <td class="text-right">{{ rupiah($item->amount_paid) }}</td>
+            </tr>
+            <tr>
+                <td>Kembali : </td>
+                <td class="text-right">{{ rupiah($item->amount_paid - $item->total_price) }}</td>
+            </tr>
+        @endif
     </table>
 
     <p class="text-center">=============================</p>

@@ -21,6 +21,7 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::post('/setting', [HomeController::class, 'updateSetting'])->name('setting.update');
 
     Route::resource('cashier', CashierController::class);
+    Route::get('/cashier/{cashier}/print', [CashierController::class, 'print'])->name('cashier.print');
 
     Route::resource('item', ItemController::class);
     Route::get('/item/{item}/status', [ItemController::class, 'status'])->name('item.status');

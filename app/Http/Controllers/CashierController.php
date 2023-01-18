@@ -81,7 +81,7 @@ class CashierController extends Controller
         // return redirect()->route('cashier.index', 'transaction=' . $transaction->id);
     }
 
-    public function print($id)
+    public function show($id)
     {
         $app = App::where([
             'id' => Auth::user()->app_id,
@@ -103,7 +103,7 @@ class CashierController extends Controller
         // return $pdf->stream('Transaksi-' . date('Y-m-d-his') . '.pdf');
     }
 
-    public function show($id)
+    public function print($id)
     {
         $app = App::where([
             'id' => Auth::user()->app_id,

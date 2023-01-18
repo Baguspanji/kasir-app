@@ -126,6 +126,8 @@
 @endpush --}}
 
 @push('script')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script type="text/javascript">
         $('#total-value').val(0);
         $(document).ready(function() {
@@ -281,7 +283,8 @@
                 success: function(response) {
                     var res = response
 
-                    getData(res.data)
+                    var win = window.open('{{ url('cashier') }}/' + res.data, '_blank');
+
                 },
                 error: function(xhr) {
                     var res = xhr.responseJSON
@@ -292,7 +295,7 @@
 
         function getData(id) {
             $.ajax({
-                url: "{{ url('cashier') }}" + '/' + id,
+                url: "{{ url('cashier') }}" + '/' + id + '/print',
             }).done(function(response) {
                 var res = response.data
 
@@ -301,18 +304,30 @@
         }
 
         function print(response) {
-            // ajax json
-            $.ajax({
-                url: "http://localhost:8005",
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: response,
-                success: function(response) {
-                    var res = response
-                    console.log(res);
-                }
-            });
+            // $.ajax({
+            //     url: "http://localhost:8005",
+            //     type: "POST",
+            //     contentType: "application/json; charset=utf-8",
+            //     dataType: "json",
+            //     data: response,
+            //     success: function(response) {
+            //         var res = response
+            //         console.log(res);
+            //     }
+            // });
+
+            axios.post('http://localhost:8005', response, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Access-Control-Allow-Origin': 'http://localhost:8005',
+                    }
+                })
+                .then((res) => {
+                    console.log(res)
+                })
+                .catch((err) => {
+                    console.log(err)
+                });
         }
     </script>
 @endpush
