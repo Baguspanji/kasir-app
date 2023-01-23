@@ -283,8 +283,8 @@
                 success: function(response) {
                     var res = response
 
-                    var win = window.open('{{ url('cashier') }}/' + res.data, '_blank');
-
+                    // var win = window.open('{{ url('cashier') }}/' + res.data, '_blank');
+                    getData(res.data)
                 },
                 error: function(xhr) {
                     var res = xhr.responseJSON
