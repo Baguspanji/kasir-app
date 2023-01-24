@@ -94,18 +94,6 @@
         }
 
         function print(response) {
-            // $.ajax({
-            //     url: "http://localhost:8005",
-            //     type: "POST",
-            //     contentType: "application/json; charset=utf-8",
-            //     dataType: "json",
-            //     data: response,
-            //     success: function(response) {
-            //         var res = response
-            //         console.log(res);
-            //     }
-            // });
-
             axios.post('http://localhost:8005', response, {
                     headers: {
                         "Content-Type": "application/json",
