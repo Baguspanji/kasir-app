@@ -303,10 +303,10 @@
             });
 
             // delay
-            setTimeout(function() {
-                // reload page
-                location.reload();
-            }, 1000);
+            // setTimeout(function() {
+            //     // reload page
+            //     location.reload();
+            // }, 5000);
         }
 
         function print(response) {
