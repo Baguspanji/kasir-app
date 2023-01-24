@@ -301,6 +301,10 @@
 
                 print(res)
             });
+
+            delay(1000).then(() => {
+                location.reload();
+            })
         }
 
         function print(response) {
