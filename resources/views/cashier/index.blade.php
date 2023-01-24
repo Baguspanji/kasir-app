@@ -302,9 +302,11 @@
                 print(res)
             });
 
-            delay(1000).then(() => {
+            // delay
+            setTimeout(function() {
+                // reload page
                 location.reload();
-            })
+            }, 1000);
         }
 
         function print(response) {

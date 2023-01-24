@@ -16,7 +16,7 @@
                                     <th scope="col">Nama</th>
                                     <th scope="col">Total Pembelian</th>
                                     <th scope="col">Detail Barang</th>
-                                    {{-- <th scope="col">Aksi</th> --}}
+                                    <th scope="col">Aksi</th>
 
                                 </tr>
                             </thead>
@@ -39,7 +39,11 @@
                                                 </li>
                                             @endforeach
                                         </td>
-                                        {{-- <td></td> --}}
+                                        <td>
+                                            <button class="btn btn-sm btn-primary"
+                                                onclick="getData({{ $item->id }})">Cetak
+                                                Struk</button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -54,6 +58,8 @@
 @endsection
 
 @push('script')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function() {
             var dt = $('#dt').DataTable({
@@ -68,5 +74,50 @@
                 $('#addStok').modal('show');
             })
         });
+    </script>
+
+    <script>
+        function getData(id) {
+            $.ajax({
+                url: "{{ url('cashier') }}" + '/' + id + '/print',
+            }).done(function(response) {
+                var res = response.data
+
+                print(res)
+            });
+
+            // delay
+            setTimeout(function() {
+                // reload page
+                location.reload();
+            }, 1000);
+        }
+
+        function print(response) {
+            // $.ajax({
+            //     url: "http://localhost:8005",
+            //     type: "POST",
+            //     contentType: "application/json; charset=utf-8",
+            //     dataType: "json",
+            //     data: response,
+            //     success: function(response) {
+            //         var res = response
+            //         console.log(res);
+            //     }
+            // });
+
+            axios.post('http://localhost:8005', response, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Access-Control-Allow-Origin': 'http://localhost:8005',
+                    }
+                })
+                .then((res) => {
+                    console.log(res)
+                })
+                .catch((err) => {
+                    console.log(err)
+                });
+        }
     </script>
 @endpush
