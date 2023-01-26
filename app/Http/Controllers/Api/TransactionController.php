@@ -74,7 +74,7 @@ class TransactionController extends Controller
                 $key = array_search($value->id, collect($request->items)->pluck('id')->toArray());
 
                 $total_take_price += $value->take_price * $request->items[$key]['quantity'];
-                $total_price += $value->price * $request->items[$key]['quantity'];
+                $total_price += $request->items[$key]['price'] * $request->items[$key]['quantity'];
 
                 $detailCreated[] = [
                     'app_id' => Auth::user()->app_id,
