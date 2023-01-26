@@ -20,9 +20,9 @@ class Item extends Model
     {
         return $this->hasMany(CostShopDetail::class);
     }
-    
-    public function transaction_detail_items()
+
+    public function transaction_detail()
     {
-        return $this->hasMany(TransactionDetailItem::class);
+        return $this->hasMany(TransactionDetail::class);
     }
 }

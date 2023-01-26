@@ -20,7 +20,7 @@ class TransactionController extends Controller
             'details.item',
         ])->Where([
             'app_id' => Auth::user()->app_id,
-        ]);
+        ])->orderBy('created_at', 'DESC');
 
         $response = [
             'message' => 'Berhasil mendapat data item',
@@ -80,7 +80,7 @@ class TransactionController extends Controller
                     'app_id' => Auth::user()->app_id,
                     'transaction_id' => $transaction->id,
                     'take_price' => $value->take_price,
-                    'price' => $value->price,
+                    'price' => $request->items[$key]['price'],
                     'item_id' => $value->id,
                     'quantity' => $request->items[$key]['quantity'],
                     'created_at' => now(),
@@ -145,7 +145,7 @@ class TransactionController extends Controller
             'transaction',
         ])->Where([
             'app_id' => Auth::user()->app_id,
-        ]);
+        ])->orderBy('created_at', 'DESC');
 
         $response = [
             'message' => 'Berhasil mendapat data item',

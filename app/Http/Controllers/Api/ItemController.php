@@ -23,7 +23,7 @@ class ItemController extends Controller
             fn($q) =>
             $q->where('code', 'like', '%' . $keyword . '%')
                 ->orWhere('name', 'like', '%' . $keyword . '%')
-        );
+        )->orderBy('created_at', 'DESC');
 
         $response = [
             'message' => 'Berhasil mendapat data item',
@@ -134,7 +134,36 @@ class ItemController extends Controller
 
     public function destroy(Item $item)
     {
-        //
+        $transactions = $item->load('transaction_detail')->transaction_detail;
+
+        if ($transactions->count() > 0) {
+            $response = [
+                'message' => 'Item memiliki transakasi',
+            ];
+
+            return response()->json($response, 400);
+        }
+
+        try {
+            DB::beginTransaction();
+            $item->delete();
+
+            DB::commit();
+            $response = [
+                'message' => 'Berhasil hapus item',
+            ];
+
+            return response()->json($response, 200);
+        } catch (\Throwable$th) {
+            DB::rollBack();
+            $response = [
+                'message' => 'Gagal mengubah item',
+                'data' => $th->getMessage(),
+            ];
+
+            return response()->json($response, 500);
+        }
+
     }
 
     public function status(Item $item)
