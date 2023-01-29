@@ -57,6 +57,8 @@ class HomeController extends Controller
             // 'email' => 'required',
             // 'logo' => 'required',
             'pr_name' => 'required',
+            'open_time' => 'required',
+            'struk_message' => 'required',
             'messages' => 'required|array',
         ]);
 
@@ -67,6 +69,8 @@ class HomeController extends Controller
             // 'email' => $request->email,
             // 'logo' => $request->logo,
             'pr_name' => $request->pr_name,
+            'open_time' => $request->open_time,
+            'struk_message' => $request->struk_message,
             'messages' => $request->messages,
         ]);
 

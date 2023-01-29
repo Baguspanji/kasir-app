@@ -18,15 +18,140 @@
                             {{ isset($post) ? method_field('PUT') : '' }}
                             @csrf
 
-                            {{-- Kode --}}
                             <div class="mb-3">
-                                <label for="code" class="form-label">Kode Barang</label>
-                                <input type="text" name="code"
-                                    class="form-control @error('code') is-invalid @enderror" id="code"
-                                    value="{{ old('code', isset($post->code) ? $post->code : '') }}"
+                                <label for="code_1" class="form-label">Kode Barang 1</label>
+                                <input type="text" name="code_1"
+                                    class="form-control @error('code_1') is-invalid @enderror" id="code_1"
+                                    value="{{ old('code_1', isset($post->code_1) ? $post->code_1 : '') }}"
                                     placeholder="Masukkan Kode Barang">
 
-                                @error('code')
+                                @error('code_1')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="code_2" class="form-label">Kode Barang 2</label>
+                                <input type="text" name="code_2"
+                                    class="form-control @error('code_2') is-invalid @enderror" id="code_2"
+                                    value="{{ old('code_2', isset($post->code_2) ? $post->code_2 : '') }}"
+                                    placeholder="Masukkan Kode Barang">
+
+                                @error('code_2')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="code_3" class="form-label">Kode Barang 3</label>
+                                <input type="text" name="code_3"
+                                    class="form-control @error('code_3') is-invalid @enderror" id="code_3"
+                                    value="{{ old('code_3', isset($post->code_3) ? $post->code_3 : '') }}"
+                                    placeholder="Masukkan Kode Barang">
+
+                                @error('code_3')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="code_4" class="form-label">Kode Barang 4</label>
+                                <input type="text" name="code_4"
+                                    class="form-control @error('code_4') is-invalid @enderror" id="code_4"
+                                    value="{{ old('code_4', isset($post->code_4) ? $post->code_4 : '') }}"
+                                    placeholder="Masukkan Kode Barang">
+
+                                @error('code_4')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="code_5" class="form-label">Kode Barang 5</label>
+                                <input type="text" name="code_5"
+                                    class="form-control @error('code_5') is-invalid @enderror" id="code_5"
+                                    value="{{ old('code_5', isset($post->code_5) ? $post->code_5 : '') }}"
+                                    placeholder="Masukkan Kode Barang">
+
+                                @error('code_5')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="code_6" class="form-label">Kode Barang 6</label>
+                                <input type="text" name="code_6"
+                                    class="form-control @error('code_6') is-invalid @enderror" id="code_6"
+                                    value="{{ old('code_6', isset($post->code_6) ? $post->code_6 : '') }}"
+                                    placeholder="Masukkan Kode Barang">
+
+                                @error('code_6')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="code_7" class="form-label">Kode Barang 7</label>
+                                <input type="text" name="code_7"
+                                    class="form-control @error('code_7') is-invalid @enderror" id="code_7"
+                                    value="{{ old('code_7', isset($post->code_7) ? $post->code_7 : '') }}"
+                                    placeholder="Masukkan Kode Barang">
+
+                                @error('code_7')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="code_8" class="form-label">Kode Barang 8</label>
+                                <input type="text" name="code_8"
+                                    class="form-control @error('code_8') is-invalid @enderror" id="code_8"
+                                    value="{{ old('code_8', isset($post->code_8) ? $post->code_8 : '') }}"
+                                    placeholder="Masukkan Kode Barang">
+
+                                @error('code_8')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="code_9" class="form-label">Kode Barang 9</label>
+                                <input type="text" name="code_9"
+                                    class="form-control @error('code_9') is-invalid @enderror" id="code_9"
+                                    value="{{ old('code_9', isset($post->code_9) ? $post->code_9 : '') }}"
+                                    placeholder="Masukkan Kode Barang">
+
+                                @error('code_9')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="code_10" class="form-label">Kode Barang 10</label>
+                                <input type="text" name="code_10"
+                                    class="form-control @error('code_10') is-invalid @enderror" id="code_10"
+                                    value="{{ old('code_10', isset($post->code_10) ? $post->code_10 : '') }}"
+                                    placeholder="Masukkan Kode Barang">
+
+                                @error('code_10')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -47,10 +172,22 @@
                                 @enderror
                             </div>
 
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Deskripsi</label>
+                                <textarea name="description" id="description" cols="30" rows="3"
+                                    class="form-control @error('description') is-invalid @enderror" placeholder="Masukkan Deskripsi Barang">{{ old('description', isset($post->description) ? $post->description : '') }}</textarea>
+
+                                @error('description')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
                             <div class="mb-3 row">
                                 <div class="col-2">
                                     <label for="per_unit" class="form-label">Per</label>
-                                    <input type="text" name="per_unit"
+                                    <input type="number" name="per_unit"
                                         class="form-control @error('per_unit') is-invalid @enderror" id="per_unit"
                                         value="{{ old('per_unit', isset($post->per_unit) ? $post->per_unit : '') }}"
                                         placeholder="Masukkan Per Unit">
@@ -62,39 +199,15 @@
                                     @enderror
                                 </div>
                                 <div class="col-10">
-                                    <label for="unit" class="form-label">Unit</label>
+                                    <label for="unit" class="form-label">Unit {{ $post->unit }}</label>
                                     <select class="form-select @error('unit') is-invalid @enderror" id="unit"
                                         name="unit">
                                         <option value="">Pilih Unit</option>
-                                        @php
-                                            $units = [
-                                                [
-                                                    'value' => 'gram',
-                                                    'name' => 'Gram',
-                                                ],
-                                                [
-                                                    'value' => 'pcs',
-                                                    'name' => 'Pcs',
-                                                ],
-                                                [
-                                                    'value' => 'liter',
-                                                    'name' => 'Liter',
-                                                ],
-                                                [
-                                                    'value' => 'kodi',
-                                                    'name' => 'Kodi',
-                                                ],
-                                                [
-                                                    'value' => 'pack',
-                                                    'name' => 'Pack',
-                                                ],
-                                            ];
-                                        @endphp
                                         @foreach ($units as $item)
-                                            @if (old('name', isset($post->unit) ? $post->unit : '') == $item['value'])
-                                                <option value="{{ $item['value'] }}" selected>{{ $item['name'] }}</option>
+                                            @if (old('unit', isset($post->unit) ? $post->unit : '') == $item->name)
+                                                <option value="{{ $item->name }}" selected>{{ $item->name }}</option>
                                             @else
-                                                <option value="{{ $item['value'] }}">{{ $item['name'] }}</option>
+                                                <option value="{{ $item->name }}">{{ $item->name }}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -109,7 +222,7 @@
 
                             <div class="mb-3">
                                 <label for="take_price" class="form-label">Harga Beli</label>
-                                <input type="text" name="take_price"
+                                <input type="number" name="take_price"
                                     class="form-control @error('take_price') is-invalid @enderror" id="take_price"
                                     value="{{ old('take_price', isset($post->take_price) ? $post->take_price : '') }}"
                                     placeholder="Masukkan Harga Beli" required="">
@@ -123,7 +236,7 @@
 
                             <div class="mb-3">
                                 <label for="price" class="form-label">Harga Jual</label>
-                                <input type="text" name="price"
+                                <input type="number" name="price"
                                     class="form-control @error('price') is-invalid @enderror" id="price"
                                     value="{{ old('price', isset($post->price) ? $post->price : '') }}"
                                     placeholder="Masukkan Harga Jual" required="">

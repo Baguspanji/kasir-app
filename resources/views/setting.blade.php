@@ -72,6 +72,34 @@
                                 @enderror
                             </div>
 
+                            <div class="mb-3">
+                                <label for="open_time" class="form-label">Jam Buka</label>
+                                <input type="text" name="open_time"
+                                    class="form-control @error('open_time') is-invalid @enderror" id="open_time"
+                                    value="{{ old('open_time', isset($post->open_time) ? $post->open_time : '') }}"
+                                    placeholder="Masukkan Jam Buka" required="">
+
+                                @error('open_time')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="struk_message" class="form-label">Pesan Struk</label>
+                                <input type="text" name="struk_message"
+                                    class="form-control @error('struk_message') is-invalid @enderror" id="struk_message"
+                                    value="{{ old('struk_message', isset($post->struk_message) ? $post->struk_message : '') }}"
+                                    placeholder="Masukkan Pesan Struk" required="">
+
+                                @error('struk_message')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
                             <div class="mb-3 row">
                                 <label for="message" class="form-label">Pesan</label>
                                 <div class="col-10">

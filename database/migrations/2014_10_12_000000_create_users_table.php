@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('address');
             $table->string('phone');
             $table->string('pr_name');
+            $table->string('open_time');
+            $table->string('struk_message');
             $table->boolean('status')->default(true);
             $table->json('messages')->nullable();
             $table->timestamps();

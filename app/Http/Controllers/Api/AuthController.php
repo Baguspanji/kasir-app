@@ -147,8 +147,15 @@ class AuthController extends Controller
     public function changeProfile(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'phone' => 'required|string',
+            'name' => 'required',
+            'address' => 'required',
+            'phone' => 'required',
+            // 'email' => 'required',
+            // 'logo' => 'required',
+            'pr_name' => 'required',
+            'open_time' => 'required',
+            'struk_message' => 'required',
+            'messages' => 'required|array',
         ]);
 
         if ($validate->fails()) {
@@ -162,10 +169,7 @@ class AuthController extends Controller
         try {
             DB::beginTransaction();
             $user = static::findUser();
-            $user->name = $request->input('name');
-            $user->phone = $request->input('phone');
-            $user->image = $request->input('image');
-            $user->save();
+            $user->update($request->all());
             DB::commit();
 
             $respon = [

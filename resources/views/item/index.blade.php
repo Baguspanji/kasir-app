@@ -41,7 +41,19 @@
                                                 <img src="{{ $item->image }}" class="rounded" alt="...">
                                             @endif
                                         </td> --}}
-                                        <td>{{ $item->code ?? '-' }}</td>
+                                        @if ($item->code_1 == null)
+                                            <td>-</td>
+                                        @else
+                                            @php
+                                                $code = '';
+                                                for ($i = 1; $i <= 10; $i++) {
+                                                    if ($item['code_' . $i] != null) {
+                                                        $code .= '<li>' . $item['code_' . $i] . '</li>';
+                                                    }
+                                                }
+                                            @endphp
+                                            <td>{!! $code !!}</td>
+                                        @endif
                                         <td>{{ $item->name }}</td>
                                         <td>{{ Str::ucfirst($item->unit) }}</td>
                                         <td>{{ $item->take_price == 0 ? '-' : rupiah($item->take_price) }}</td>

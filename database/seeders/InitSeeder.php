@@ -21,6 +21,8 @@ class InitSeeder extends Seeder
             'address' => 'Purwosari Pasuruan',
             'phone' => '123456789',
             'pr_name' => 'Panji',
+            'open_time' => 'jam setengah 7 pagi - jam 4 sore',
+            'struk_message' => 'Terima kasih.',
             'status' => true,
             'messages' => json_encode([
                 'Selamat Datang di Kasir Demo',
@@ -51,49 +53,49 @@ class InitSeeder extends Seeder
             // ],
         ]);
 
-        // $values = [];
-        // foreach (['Makanan', 'Minuman', 'Kopi', 'Bahan Mentah'] as $value) {
-        //     $values[] = [
-        //         'app_id' => 'app.demo.kasir',
-        //         'name' => $value,
-        //         'created_at' => now(),
-        //     ];
-        // }
+        $values = [];
+        foreach (['gram', 'pcs', 'liter', 'kodi', 'pack'] as $value) {
+            $values[] = [
+                'app_id' => 'app.demo.kasir',
+                'name' => $value,
+                'created_at' => now(),
+            ];
+        }
 
-        // DB::table('categories')->insert($values);
+        DB::table('units')->insert($values);
 
         $items = [];
         foreach ([
             [
-                'code' => 'BRG-001',
+                'code_1' => 'BRG-001',
                 'name' => 'Susu Murni',
                 'unit' => '100/gram',
                 'take_price' => 8000,
                 'price' => 11000,
             ],
             [
-                'code' => 'BRG-002',
+                'code_1' => 'BRG-002',
                 'name' => 'Kentang',
                 'unit' => '100/gram',
                 'take_price' => 3000,
                 'price' => 4500,
             ],
             [
-                'code' => 'BRG-003',
+                'code_1' => 'BRG-003',
                 'name' => 'Kopi Bubuk Dampit',
                 'unit' => '100/gram',
                 'take_price' => 4000,
                 'price' => 5500,
             ],
             [
-                'code' => 'BRG-004',
+                'code_1' => 'BRG-004',
                 'name' => 'Mie Sedap Campur',
                 'unit' => '1/pack',
                 'take_price' => 89000,
                 'price' => 98000,
             ],
             [
-                'code' => 'BRG-005',
+                'code_1' => 'BRG-005',
                 'name' => 'Sosis Ayam',
                 'unit' => '1/pcs',
                 'take_price' => 1500,

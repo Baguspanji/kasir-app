@@ -21,7 +21,16 @@ class ItemController extends Controller
             'status' => $status,
         ])->when(!is_null($keyword),
             fn($q) =>
-            $q->where('code', 'like', '%' . $keyword . '%')
+            $q->where('code_1', 'like', '%' . $keyword . '%')
+                ->orWhere('code_2', 'like', '%' . $keyword . '%')
+                ->orWhere('code_3', 'like', '%' . $keyword . '%')
+                ->orWhere('code_4', 'like', '%' . $keyword . '%')
+                ->orWhere('code_5', 'like', '%' . $keyword . '%')
+                ->orWhere('code_6', 'like', '%' . $keyword . '%')
+                ->orWhere('code_7', 'like', '%' . $keyword . '%')
+                ->orWhere('code_8', 'like', '%' . $keyword . '%')
+                ->orWhere('code_9', 'like', '%' . $keyword . '%')
+                ->orWhere('code_10', 'like', '%' . $keyword . '%')
                 ->orWhere('name', 'like', '%' . $keyword . '%')
         )->orderBy('created_at', 'DESC');
 
@@ -36,6 +45,16 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
+            'code_1' => 'string',
+            'code_2' => 'string',
+            'code_3' => 'string',
+            'code_4' => 'string',
+            'code_5' => 'string',
+            'code_6' => 'string',
+            'code_7' => 'string',
+            'code_8' => 'string',
+            'code_9' => 'string',
+            'code_10' => 'string',
             'name' => 'required|string',
             'unit' => 'required|string',
             'take_price' => 'required|numeric',
@@ -91,6 +110,16 @@ class ItemController extends Controller
     public function update(Request $request, Item $item)
     {
         $validate = Validator::make($request->all(), [
+            'code_1' => 'string',
+            'code_2' => 'string',
+            'code_3' => 'string',
+            'code_4' => 'string',
+            'code_5' => 'string',
+            'code_6' => 'string',
+            'code_7' => 'string',
+            'code_8' => 'string',
+            'code_9' => 'string',
+            'code_10' => 'string',
             'name' => 'required|string',
             'unit' => 'required|string',
             'take_price' => 'required|numeric',

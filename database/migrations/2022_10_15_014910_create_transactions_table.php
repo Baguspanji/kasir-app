@@ -45,17 +45,17 @@ return new class extends Migration
             $table->foreign('app_id')->references('id')->on('apps');
         });
 
-        Schema::create('transaction_detail_items', function (Blueprint $table) {
-            $table->id();
-            $table->string('app_id');
-            $table->foreignIdFor(TransactionDetail::class)->constrained();
-            $table->foreignIdFor(Item::class)->constrained();
-            $table->integer('quantity');
-            $table->timestamps();
-            $table->softDeletes();
+        // Schema::create('transaction_detail_items', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('app_id');
+        //     $table->foreignIdFor(TransactionDetail::class)->constrained();
+        //     $table->foreignIdFor(Item::class)->constrained();
+        //     $table->integer('quantity');
+        //     $table->timestamps();
+        //     $table->softDeletes();
 
-            $table->foreign('app_id')->references('id')->on('apps');
-        });
+        //     $table->foreign('app_id')->references('id')->on('apps');
+        // });
     }
 
     /**
@@ -65,7 +65,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transaction_detail_items');
+        // Schema::dropIfExists('transaction_detail_items');
         Schema::dropIfExists('transaction_details');
         Schema::dropIfExists('transactions');
     }

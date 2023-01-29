@@ -146,11 +146,62 @@
                 // },
                 columns: [{
                         data: 'code',
-                        name: 'code'
+                        name: 'code',
+                        render: function(data, type, row) {
+                            var code = ''
+                            if (row.code_1 != null) {
+                                code = '<li>' + row.code_1 + '</li>'
+                            }
+
+                            if (row.code_2 != null) {
+                                code = code + '<li>' + row.code_2 + '</li>'
+                            }
+
+                            if (row.code_3 != null) {
+                                code = code + '<li>' + row.code_3 + '</li>'
+                            }
+
+                            if (row.code_4 != null) {
+                                code = code + '<li>' + row.code_4 + '</li>'
+                            }
+
+                            if (row.code_5 != null) {
+                                code = code + '<li>' + row.code_5 + '</li>'
+                            }
+
+                            if (row.code_6 != null) {
+                                code = code + '<li>' + row.code_6 + '</li>'
+                            }
+
+                            if (row.code_7 != null) {
+                                code = code + '<li>' + row.code_7 + '</li>'
+                            }
+
+                            if (row.code_8 != null) {
+                                code = code + '<li>' + row.code_8 + '</li>'
+                            }
+
+                            if (row.code_9 != null) {
+                                code = code + '<li>' + row.code_9 + '</li>'
+                            }
+
+                            if (row.code_10 != null) {
+                                code = code + '<li>' + row.code_10 + '</li>'
+                            }
+
+                            return code
+                        }
                     },
                     {
                         data: 'name',
-                        name: 'name'
+                        name: 'name',
+                        render: function(data, type, row) {
+                            var description = ''
+                            if (row.description != null) {
+                                description = '(' + row.description + ')'
+                            }
+                            return row.name + description
+                        }
                     },
                     {
                         data: 'unit',

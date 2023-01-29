@@ -17,8 +17,18 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('app_id');
-            $table->string('code')->nullable();
+            $table->string('code_1')->nullable();
+            $table->string('code_2')->nullable();
+            $table->string('code_3')->nullable();
+            $table->string('code_4')->nullable();
+            $table->string('code_5')->nullable();
+            $table->string('code_6')->nullable();
+            $table->string('code_7')->nullable();
+            $table->string('code_8')->nullable();
+            $table->string('code_9')->nullable();
+            $table->string('code_10')->nullable();
             $table->string('name');
+            $table->string('description')->nullable();
             $table->string('unit')->nullable();
             $table->integer('stock')->nullable();
             $table->integer('take_price')->default(0);
