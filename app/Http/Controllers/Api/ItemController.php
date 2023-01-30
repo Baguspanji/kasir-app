@@ -45,16 +45,16 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'code_1' => 'string',
-            'code_2' => 'string',
-            'code_3' => 'string',
-            'code_4' => 'string',
-            'code_5' => 'string',
-            'code_6' => 'string',
-            'code_7' => 'string',
-            'code_8' => 'string',
-            'code_9' => 'string',
-            'code_10' => 'string',
+            'code_1' => 'nullable|string',
+            'code_2' => 'nullable|string',
+            'code_3' => 'nullable|string',
+            'code_4' => 'nullable|string',
+            'code_5' => 'nullable|string',
+            'code_6' => 'nullable|string',
+            'code_7' => 'nullable|string',
+            'code_8' => 'nullable|string',
+            'code_9' => 'nullable|string',
+            'code_10' => 'nullable|string',
             'name' => 'required|string',
             'unit' => 'required|string',
             'take_price' => 'required|numeric',
@@ -72,7 +72,7 @@ class ItemController extends Controller
 
         $dataCreated = array_merge($request->all(), [
             'app_id' => Auth::user()->app_id,
-            'unit' => $request->per_unit . '/' . $request->unit,
+            'unit' => ($request->per_unit ?? '1') . '/' . $request->unit,
         ]);
 
         try {
@@ -110,16 +110,16 @@ class ItemController extends Controller
     public function update(Request $request, Item $item)
     {
         $validate = Validator::make($request->all(), [
-            'code_1' => 'string',
-            'code_2' => 'string',
-            'code_3' => 'string',
-            'code_4' => 'string',
-            'code_5' => 'string',
-            'code_6' => 'string',
-            'code_7' => 'string',
-            'code_8' => 'string',
-            'code_9' => 'string',
-            'code_10' => 'string',
+            'code_1' => 'nullable|string',
+            'code_2' => 'nullable|string',
+            'code_3' => 'nullable|string',
+            'code_4' => 'nullable|string',
+            'code_5' => 'nullable|string',
+            'code_6' => 'nullable|string',
+            'code_7' => 'nullable|string',
+            'code_8' => 'nullable|string',
+            'code_9' => 'nullable|string',
+            'code_10' => 'nullable|string',
             'name' => 'required|string',
             'unit' => 'required|string',
             'take_price' => 'required|numeric',
@@ -136,7 +136,7 @@ class ItemController extends Controller
         }
 
         $dataUpdated = array_merge($request->all(), [
-            'unit' => $request->per_unit . '/' . $request->unit,
+            'unit' => ($request->per_unit ?? '1') . '/' . $request->unit,
         ]);
 
         try {
