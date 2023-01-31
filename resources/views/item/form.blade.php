@@ -198,19 +198,12 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-10">
-                                    <label for="unit" class="form-label">Unit {{ $post->unit }}</label>
-                                    <select class="form-select @error('unit') is-invalid @enderror" id="unit"
-                                        name="unit">
-                                        <option value="">Pilih Unit</option>
-                                        @foreach ($units as $item)
-                                            @if (old('unit', isset($post->unit) ? $post->unit : '') == $item->name)
-                                                <option value="{{ $item->name }}" selected>{{ $item->name }}</option>
-                                            @else
-                                                <option value="{{ $item->name }}">{{ $item->name }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
+                                <div class="col-2">
+                                    <label for="unit" class="form-label">Unit</label>
+                                    <input type="text" name="unit"
+                                        class="form-control @error('unit') is-invalid @enderror" id="unit"
+                                        value="{{ old('unit', isset($post->unit) ? $post->unit : '') }}"
+                                        placeholder="Masukkan Unit">
 
                                     @error('unit')
                                         <div class="invalid-feedback">

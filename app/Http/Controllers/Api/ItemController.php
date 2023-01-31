@@ -72,7 +72,7 @@ class ItemController extends Controller
 
         $dataCreated = array_merge($request->all(), [
             'app_id' => Auth::user()->app_id,
-            'unit' => ($request->per_unit ?? '1') . '/' . $request->unit,
+            'unit' => ($request->per_unit ?? '1') . '/' . strtolower($request->unit),
         ]);
 
         try {
@@ -136,7 +136,7 @@ class ItemController extends Controller
         }
 
         $dataUpdated = array_merge($request->all(), [
-            'unit' => ($request->per_unit ?? '1') . '/' . $request->unit,
+            'unit' => ($request->per_unit ?? '1') . '/' . strtolower($request->unit),
         ]);
 
         try {
