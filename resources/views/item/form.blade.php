@@ -185,7 +185,7 @@
                             </div>
 
                             <div class="mb-3 row">
-                                <div class="col-2">
+                                <div class="col-6">
                                     <label for="per_unit" class="form-label">Per</label>
                                     <input type="number" name="per_unit"
                                         class="form-control @error('per_unit') is-invalid @enderror" id="per_unit"
@@ -198,7 +198,7 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-2">
+                                <div class="col-6">
                                     <label for="unit" class="form-label">Unit</label>
                                     <input type="text" name="unit"
                                         class="form-control @error('unit') is-invalid @enderror" id="unit"
