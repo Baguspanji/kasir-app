@@ -26,7 +26,7 @@ Route::group(['middleware' => ['auth:users']], function () {
 
     Route::get('unit', [UnitController::class, 'index']);
 
-    Route::apiResource('transaction', TransactionController::class)->except(['update', 'destroy']);
+    Route::apiResource('transaction', TransactionController::class)->except(['destroy']);
     Route::get('transaction-income/', [TransactionController::class, 'income']);
     Route::get('transaction-income/{transaction}', [TransactionController::class, 'incomeById']);
 });
