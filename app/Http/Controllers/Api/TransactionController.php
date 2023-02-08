@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exports\ReportExport;
 use App\Http\Controllers\Controller;
+use App\Models\App;
 use App\Models\Item;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionController extends Controller
 {
@@ -253,4 +258,95 @@ class TransactionController extends Controller
         return response()->json($response, 200);
     }
 
+    public function export(Request $request)
+    {
+        $valiate = Validator::make($request->all(), [
+            'date' => 'date',
+            'type' => 'in:daily,monthly',
+        ]);
+
+        if ($valiate->fails()) {
+            $response = [
+                'message' => 'Gagal menambahkan item',
+                'data' => $valiate->errors(),
+            ];
+
+            return response()->json($response, 422);
+        }
+
+        $date = Carbon::createFromDate($request->date ?? now());
+        $type = $request->type ?? 'daily';
+        $app = App::findOrFail(Auth::user()->app_id);
+
+        $transaction = TransactionDetail::with([
+            'item',
+            'transaction',
+        ])
+            ->when($type == 'daily', function ($query) use ($date) {
+                $query->whereHas('transaction', function ($query) use ($date) {
+                    $query->whereDate('date', $date->format('Y-m-d'));
+                });
+            })
+            ->when($type == 'monthly', function ($query) use ($date) {
+                $query->whereHas('transaction', function ($query) use ($date) {
+                    $query->whereBetween('date', [
+                        $date->startOfMonth()->format('Y-m-d'),
+                        $date->endOfMonth()->format('Y-m-d'),
+                    ]);
+                });
+            })
+            ->where([
+                'app_id' => Auth::user()->app_id,
+            ])->get();
+
+        $dataExport = [];
+        foreach ($transaction as $key => $value) {
+            $dataExport[] = [
+                'date' => $value->transaction->date,
+                'name' => $value->item->name,
+                'quantity' => $value->quantity,
+                'price' => $value->price,
+                'take_price' => $value->take_price,
+                'income' => ($value->quantity * $value->price) - ($value->quantity * $value->take_price),
+            ];
+        }
+
+        if ($type == 'daily') {
+            $ex = explode(' ', $date);
+            $tanggal = substr($ex[0], 8, 2);
+            $bulan = $tanggal . ' ' . bulan(substr($ex[0], 5, 2));
+            $tahun = substr($ex[0], 0, 4);
+        } else {
+            $ex = explode(' ', $date);
+            $bulan = bulan(substr($ex[0], 5, 2));
+            $tahun = substr($ex[0], 0, 4);
+        }
+
+        // return $dataExport;
+        $export = new ReportExport($dataExport, $bulan . ' ' . $tahun, $app->address, $app->name);
+
+        // return $export->map($dataExport);
+        if (!Storage::exists('public\export')) {
+            Storage::makeDirectory('public\export');
+        }
+
+        $name = 'laporan-' . Carbon::now()->format('Y-m-d') . '.xlsx';
+        $ecel = Excel::store($export, $name, 'export');
+
+        if (!$ecel) {
+            $response = [
+                'message' => 'Gagal mendapat data item',
+                'data' => null,
+            ];
+
+            return response()->json($response, 500);
+        }
+
+        $response = [
+            'message' => 'Berhasil mendapat data item',
+            'data' => Storage::url('export/' . $name),
+        ];
+
+        return response()->json($response, 200);
+    }
 }

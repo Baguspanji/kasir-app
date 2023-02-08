@@ -28,7 +28,8 @@ Route::group(['middleware' => ['auth:users']], function () {
 
     Route::apiResource('transaction', TransactionController::class)->except(['destroy']);
     Route::get('transaction-income/', [TransactionController::class, 'income']);
-    Route::get('transaction-income/{transaction}', [TransactionController::class, 'incomeById']);
+    Route::get('transaction-income/detail/{transaction}', [TransactionController::class, 'incomeById']);
+    Route::post('transaction-income/export', [TransactionController::class, 'export']);
 });
 
 Route::get('/terms-condition', [HomeController::class, 'getTNC']);
