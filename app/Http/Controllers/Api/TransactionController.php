@@ -342,11 +342,6 @@ class TransactionController extends Controller
             return response()->json($response, 500);
         }
 
-        $response = [
-            'message' => 'Berhasil mendapat data item',
-            'data' => Storage::url('export/' . $name),
-        ];
-
-        return response()->json($response, 200);
+        return response()->download(storage_path('app/public/export/' . $name));
     }
 }
