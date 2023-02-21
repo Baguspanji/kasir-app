@@ -15,13 +15,23 @@ class TransactionController extends Controller
 {
     public function index()
     {
+        $date = request()->date ?? null;
+
         $datas = Transaction::with([
             'details',
             'details.item',
         ])
             ->where([
                 'app_id' => Auth::user()->app_id,
-            ])->get();
+            ])
+            ->when($date, function ($query) use ($date) {
+                $query->whereBetween('date', [
+                    Carbon::createFromDate($date)->startOfMonth()->format('Y-m-d'),
+                    Carbon::createFromDate($date)->endOfMonth()->format('Y-m-d'),
+                ]);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('transaction.index', compact('datas'));
     }
@@ -35,7 +45,9 @@ class TransactionController extends Controller
         ])
             ->where([
                 'app_id' => Auth::user()->app_id,
-            ])->get();
+            ])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('transaction.income', compact('datas'));
     }
