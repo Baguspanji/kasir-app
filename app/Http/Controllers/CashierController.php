@@ -23,6 +23,15 @@ class CashierController extends Controller
 
     public function store(Request $request)
     {
+        // ajax check
+
+        if (!$request->ajax()) {
+            return [
+                'status' => false,
+                'message' => 'Forbidden',
+            ];
+        }
+
         $request->validate([
             'quantity' => 'required|array',
             'price' => 'required|array',
@@ -57,7 +66,7 @@ class CashierController extends Controller
                 'app_id' => Auth::user()->app_id,
                 'transaction_id' => $transaction->id,
                 'take_price' => $value->take_price,
-                'price' => $value->price,
+                'price' => $request->price[$key],
                 'item_id' => $value->id,
                 'quantity' => $request->quantity[$key],
                 'created_at' => now(),

@@ -92,6 +92,42 @@
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit Keranjang</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formUpdate">
+                            <input type="hidden" name="id-update" id="idUpdate">
+                            <div class="mb-3">
+                                <label for="nameUpdate" class="form-label">Nama Barang</label>
+                                <input type="text" name="name-update" class="form-control" id="nameUpdate" readonly>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <div class="col-6">
+                                    <label for="qtyUpdate" class="form-label">Qty</label>
+                                    <input type="number" name="qty-update" class="form-control" id="qtyUpdate">
+                                </div>
+                                <div class="col-6">
+                                    <label for="priceUpdate" class="form-label">Harga</label>
+                                    <input type="number" name="price-Update" class="form-control" id="priceUpdate">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-warning" id="updateCart">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 @endsection
 
@@ -218,8 +254,7 @@
                         data: 'id',
                         name: 'id',
                         render: function(data, type, row) {
-                            return '<button class="btn btn-sm btn-primary" onclick="addCart(' + row
-                                .id + ')"><i class="bi bi-cart-plus"></i></button>';
+                            return `<button class="btn btn-sm btn-primary btn-${row.id}" onclick="addCart(${row.id})"><i class="bi bi-cart-plus"></i></button>`;
                         }
                     },
                 ]
@@ -245,71 +280,78 @@
         }
 
         function addToCart(id, name, price) {
-            var qty = $('.qty-' + id).val()
-            var total = parseInt($('#total-value').val()) + parseInt(price);
+            var item =
+                `<tr class="item-${id} cart-data">` +
+                `    <td>` +
+                `        <button type="button" class="btn btn-sm btn-danger" onclick="removeItem(${id})">` +
+                '           <i class="bi bi-trash"></i>' +
+                '        </button>' +
+                `        <button type="button" class="btn btn-sm btn-warning" onclick="editItem(this)" data-id="${id}">` +
+                '           <i class="bi bi-pencil"></i>' +
+                '        </button>' +
+                `    </td>` +
+                `    <td id="name-${id}">${name}</td>` +
+                `    <td class="qty-${id}">1</td>` +
+                `    <td class="price-${id}">${rupiah(price)}</td>` +
+                `    <input type="hidden" name="quantity[]" id="qty-${id}" value="1">` +
+                `    <input type="hidden" name="price[]" id="price-${id}" value="${price}">` +
+                `    <input type="hidden" name="id[]" value="${id}">` +
+                '</tr>';
 
-            if (qty != null) {
-                $('.qty-' + id).val(++qty)
-                $('#price-' + id).val(qty * price)
-                $('.price-' + id).html(rupiah(qty * price))
-
-                $('#total').html(rupiah(total));
-                $('#total-value').val(total);
-            } else {
-                var item =
-                    `<tr class="item-${id}">` +
-                    `    <td>` +
-                    `        <button type="button" class="btn btn-sm btn-danger" onclick="removeItem(${id})">` +
-                    '           <i class="bi bi-trash"></i>' +
-                    '        </button>' +
-                    `    </td>` +
-                    `    <td>${name}</td>` +
-                    '    <td>' +
-                    `        <input type="number" name="quantity[]" min="1" class="form-control input-qty qty-${id}" onchange="quantity(${id})" value="1">` +
-                    `        <input type="hidden" name="price[]" id="price-${id}" value="${price}">` +
-                    `        <input type="hidden" name="id[]" value="${id}">` +
-                    '    </td>' +
-                    `    <td class="price-${id}">${rupiah(price)}</td>` +
-                    '</tr>';
-
-                $(item).insertBefore('.cart-total');
-                $('#total').html(rupiah(total));
-                $('#total-value').val(total);
-            }
+            $(item).insertBefore('.cart-total');
+            $('.btn-' + id).hide();
         }
 
-        function quantity(id) {
-            var qty = $('.qty-' + id).val()
-            var total = parseInt($('#total-value').val())
+        function editItem(el) {
+            var id = $(el).data('id')
 
-            // total setelah dikurangi
-            total = total - parseInt($('#price-' + id).val())
-
-            $.ajax({
-                url: "{{ url('ajax/item') }}" + '/' + id,
-            }).done(function(response) {
-                var res = response.data
-
-                var price_now = res.price * qty
-                $('#price-' + id).val(price_now)
-                $('.price-' + id).html(rupiah(price_now))
-
-                // total setelah ditambah
-                total = total + price_now
-                $('#total').html(rupiah(total));
-                $('#total-value').val(total);
-            });
-
-        }
-
-        function removeItem(id) {
+            var name = $('#name-' + id).html()
+            var qty = $('#qty-' + id).val()
             var price = $('#price-' + id).val()
-            var total = parseInt($('#total-value').val()) - price;
+
+            var form = $('#formUpdate')
+            form.find('#idUpdate').val(id)
+            form.find('#nameUpdate').val(name)
+            form.find('#qtyUpdate').val(qty)
+            form.find('#priceUpdate').val(price / qty)
+
+            $('#editModal').modal('show')
+        }
+
+        $('#updateCart').on('click', function() {
+            var form = $('#formUpdate')
+            var id = form.find('#idUpdate').val()
+            var qty = form.find('#qtyUpdate').val()
+            var price = form.find('#priceUpdate').val()
+
+            var priceQty = parseInt(price) * parseInt(qty)
+
+            $('#qty-' + id).val(qty)
+            $('#price-' + id).val(price)
+            $('.qty-' + id).html(qty)
+            $('.price-' + id).html(rupiah(priceQty))
+
+            $('#editModal').modal('hide')
+            sumTotal()
+        })
+
+        function sumTotal() {
+            var AllPrice = $('.cart-data').find('input[name="price[]"]')
+            var total = 0
+
+            AllPrice.each(function() {
+                total += parseInt($(this).val())
+            })
 
             $('#total').html(rupiah(total));
             $('#total-value').val(total);
+        }
 
+        function removeItem(id) {
             $(`.item-${id}`).remove()
+            $('.btn-' + id).show()
+
+            sumTotal()
         }
 
         function clearItem() {
@@ -317,6 +359,8 @@
             cartTotal.siblings().remove()
             $('#total').html(rupiah(0));
             $('#total-value').val(0);
+
+            $('.btn-primary').show()
         }
 
         $('#formSubmit').submit(function(e) {
