@@ -331,12 +331,12 @@ class TransactionController extends Controller
             Storage::makeDirectory('public\export');
         }
 
-        $name = 'laporan-' . Carbon::now()->format('Y-m-d') . '.xlsx';
-        $ecel = Excel::store($export, $name, 'export');
+        $name = 'laporan-' . $date->format('Y-m-d') . '.xlsx';
+        Excel::store($export, $name, 'export');
 
-        if (!$ecel) {
+        if (!file_exists(storage_path('app/public/export/' . $name))) {
             $response = [
-                'message' => 'Gagal mendapat data item',
+                'message' => 'Gagal export data',
                 'data' => null,
             ];
 
@@ -347,6 +347,6 @@ class TransactionController extends Controller
             'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         );
 
-        return Response::download(storage_path('app/public/export/' . $name), $name, $headers);
+        return response()->download(storage_path('app/public/export/' . $name), $name, $headers);
     }
 }
