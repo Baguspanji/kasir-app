@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -327,26 +326,29 @@ class TransactionController extends Controller
         $export = new ReportExport($dataExport, $bulan . ' ' . $tahun, $app->address, $app->name);
 
         // return $export->map($dataExport);
-        if (!Storage::exists('public\export')) {
-            Storage::makeDirectory('public\export');
-        }
+        // if (!Storage::exists('public\export')) {
+        //     Storage::makeDirectory('public\export');
+        // }
 
         $name = 'laporan-' . $date->format('Y-m-d') . '.xlsx';
-        Excel::store($export, $name, 'export');
-
-        if (!file_exists(storage_path('app/public/export/' . $name))) {
-            $response = [
-                'message' => 'Gagal export data',
-                'data' => null,
-            ];
-
-            return response()->json($response, 500);
+        try {
+            return Excel::download($export, $name);
+        } catch (\Exception$e) {
+            return $e->getMessage();
         }
+        // if (!file_exists(storage_path('app/public/export/' . $name))) {
+        //     $response = [
+        //         'message' => 'Gagal export data',
+        //         'data' => null,
+        //     ];
 
-        $headers = array(
-            'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        );
+        //     return response()->json($response, 500);
+        // }
 
-        return response()->download(storage_path('app/public/export/' . $name), $name, $headers);
+        // $headers = array(
+        //     'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        // );
+
+        // return response()->download(storage_path('app/public/export/' . $name), $name, $headers);
     }
 }
