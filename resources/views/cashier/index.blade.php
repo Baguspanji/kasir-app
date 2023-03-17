@@ -295,11 +295,14 @@
                 `    <td class="price-${id}">${rupiah(price)}</td>` +
                 `    <input type="hidden" name="quantity[]" id="qty-${id}" value="1">` +
                 `    <input type="hidden" name="price[]" id="price-${id}" value="${price}">` +
+                `    <input type="hidden" name="total_item[]" id="total-item-${id}" value="${price}">` +
                 `    <input type="hidden" name="id[]" value="${id}">` +
                 '</tr>';
 
             $(item).insertBefore('.cart-total');
             $('.btn-' + id).hide();
+
+            sumTotal();
         }
 
         function editItem(el) {
@@ -313,7 +316,7 @@
             form.find('#idUpdate').val(id)
             form.find('#nameUpdate').val(name)
             form.find('#qtyUpdate').val(qty)
-            form.find('#priceUpdate').val(price / qty)
+            form.find('#priceUpdate').val(price)
 
             $('#editModal').modal('show')
         }
@@ -328,6 +331,7 @@
 
             $('#qty-' + id).val(qty)
             $('#price-' + id).val(price)
+            $('#total-item-' + id).val(priceQty)
             $('.qty-' + id).html(qty)
             $('.price-' + id).html(rupiah(priceQty))
 
@@ -336,7 +340,7 @@
         })
 
         function sumTotal() {
-            var AllPrice = $('.cart-data').find('input[name="price[]"]')
+            var AllPrice = $('.cart-data').find('input[name="total_item[]"]')
             var total = 0
 
             AllPrice.each(function() {
@@ -395,13 +399,14 @@
                 var res = response.data
 
                 print(res)
+                // console.log(res);
             });
 
             // delay
-            setTimeout(function() {
-                // reload page
-                location.reload();
-            }, 5000);
+            // setTimeout(function() {
+            //     // reload page
+            //     location.reload();
+            // }, 5000);
         }
 
         function print(response) {
@@ -412,9 +417,55 @@
                     }
                 })
                 .then((res) => {
+                    clearItem()
+
+                    const notyf = new Notyf({
+                        position: {
+                            x: 'right',
+                            y: 'top',
+                        },
+                        types: [{
+                            type: 'info',
+                            background: '#0948B3',
+                            icon: {
+                                className: 'bi bi-check-circle-fill',
+                                tagName: 'span',
+                                color: '#fff'
+                            },
+                            dismissible: false
+                        }]
+                    });
+                    notyf.open({
+                        type: 'success',
+                        message: 'Berhasil Mencetak Struk'
+                    });
+
                     console.log(res)
                 })
                 .catch((err) => {
+                    clearItem()
+
+                    const notyf = new Notyf({
+                        position: {
+                            x: 'right',
+                            y: 'top',
+                        },
+                        types: [{
+                            type: 'error',
+                            background: '#FA5252',
+                            icon: {
+                                className: 'bi bi-x-circle',
+                                tagName: 'span',
+                                color: '#fff'
+                            },
+                            dismissible: false
+                        }]
+                    });
+                    notyf.open({
+                        type: 'error',
+                        message: 'Gagal Mencetak Struk'
+                    });
+
                     console.log(err)
                 });
         }

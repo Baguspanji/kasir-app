@@ -62,7 +62,7 @@
                     type: 'error',
                     background: '#FA5252',
                     icon: {
-                        className: 'fas fa-times',
+                        className: 'bi bi-x-circle',
                         tagName: 'span',
                         color: '#fff'
                     },
@@ -87,7 +87,7 @@
                     type: 'info',
                     background: '#0948B3',
                     icon: {
-                        className: 'fas fa-info-circle',
+                        className: 'bi bi-check-circle-fill',
                         tagName: 'span',
                         color: '#fff'
                     },
@@ -112,7 +112,7 @@
                     type: 'info',
                     background: '#0948B3',
                     icon: {
-                        className: 'fas fa-exclamation-triangle',
+                        className: 'bi bi-info-circle-fill',
                         tagName: 'span',
                         color: '#fff'
                     },

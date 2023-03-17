@@ -100,10 +100,10 @@
             });
 
             // delay
-            setTimeout(function() {
-                // reload page
-                location.reload();
-            }, 5000);
+            // setTimeout(function() {
+            //     // reload page
+            //     location.reload();
+            // }, 5000);
         }
 
         function print(response) {
@@ -114,9 +114,51 @@
                     }
                 })
                 .then((res) => {
+                    const notyf = new Notyf({
+                        position: {
+                            x: 'right',
+                            y: 'top',
+                        },
+                        types: [{
+                            type: 'info',
+                            background: '#0948B3',
+                            icon: {
+                                className: 'bi bi-check-circle-fill',
+                                tagName: 'span',
+                                color: '#fff'
+                            },
+                            dismissible: false
+                        }]
+                    });
+                    notyf.open({
+                        type: 'success',
+                        message: 'Berhasil Mencetak Struk'
+                    });
+
                     console.log(res)
                 })
                 .catch((err) => {
+                    const notyf = new Notyf({
+                        position: {
+                            x: 'right',
+                            y: 'top',
+                        },
+                        types: [{
+                            type: 'error',
+                            background: '#FA5252',
+                            icon: {
+                                className: 'bi bi-x-circle',
+                                tagName: 'span',
+                                color: '#fff'
+                            },
+                            dismissible: false
+                        }]
+                    });
+                    notyf.open({
+                        type: 'error',
+                        message: 'Gagal Mencetak Struk'
+                    });
+
                     console.log(err)
                 });
         }
