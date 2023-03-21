@@ -16,10 +16,7 @@ class ItemController extends Controller
         $status = request()->query('status') ?? true;
         $keyword = request()->query('keyword') ?? null;
 
-        $datas = Item::where([
-            'app_id' => Auth::user()->app_id,
-            'status' => $status,
-        ])->when(!is_null($keyword),
+        $datas = Item::when(!is_null($keyword),
             fn($q) =>
             $q->where('code_1', 'like', '%' . $keyword . '%')
                 ->orWhere('code_2', 'like', '%' . $keyword . '%')
@@ -32,7 +29,12 @@ class ItemController extends Controller
                 ->orWhere('code_9', 'like', '%' . $keyword . '%')
                 ->orWhere('code_10', 'like', '%' . $keyword . '%')
                 ->orWhere('name', 'like', '%' . $keyword . '%')
-        )->orderBy('created_at', 'DESC');
+        )
+            ->where([
+                'app_id' => Auth::user()->app_id,
+                'status' => $status,
+            ])
+            ->orderBy('created_at', 'DESC');
 
         $response = [
             'message' => 'Berhasil mendapat data item',
