@@ -60,7 +60,7 @@ class CashierController extends Controller
             $key = array_search($value->id, $request->id);
 
             $total_take_price += $value->take_price * $request->quantity[$key];
-            $total_price += $value->price * $request->quantity[$key];
+            $total_price += $request->price[$key] * $request->quantity[$key];
 
             $detailCreated[] = [
                 'app_id' => Auth::user()->app_id,
