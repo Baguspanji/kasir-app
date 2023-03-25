@@ -80,8 +80,8 @@
                                         placeholder="Bayar">
                                 </div>
                                 <div class="col-4">
-                                    <button type="submit" class="btn btn-success btn-sm float-end mt-1"><i
-                                            class="bi bi-cash"></i>
+                                    <button type="submit" id="formSubmiBtn"
+                                        class="btn btn-success btn-sm float-end mt-1"><i class="bi bi-cash"></i>
                                         Proses</button>
                                 </div>
                             </div>
@@ -365,10 +365,14 @@
             $('#total-value').val(0);
 
             $('.btn-primary').show()
+
+            $('#formSubmiBtn').attr('disabled', false)
         }
 
         $('#formSubmit').submit(function(e) {
             e.preventDefault();
+
+            $('#formSubmiBtn').attr('disabled', true)
 
             var form = $(this);
             var token = $('meta[name="csrf-token"]').attr('content');
