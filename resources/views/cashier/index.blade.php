@@ -327,11 +327,6 @@
                 return this.value;
             }).get();
 
-            if (ids.length == 0) {
-                ids = ['']
-            }
-
-            // find id
             var find = ids.find(el => el == id)
 
             if (find) {
