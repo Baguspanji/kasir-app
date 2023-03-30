@@ -64,6 +64,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-center">
+                                    <tr class="cart-first"></tr>
                                     <tr class="cart-total">
                                         <td colspan="3" class="fw-bold">Total</td>
                                         <td id="total">Rp. 0</td>
@@ -96,12 +97,12 @@
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit Keranjang</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="formUpdate">
+                    <form id="formUpdate">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Edit Keranjang</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
                             <input type="hidden" name="id-update" id="idUpdate">
                             <div class="mb-3">
                                 <label for="nameUpdate" class="form-label">Nama Barang</label>
@@ -111,19 +112,19 @@
                             <div class="mb-3 row">
                                 <div class="col-6">
                                     <label for="qtyUpdate" class="form-label">Qty</label>
-                                    <input type="number" name="qty-update" class="form-control" id="qtyUpdate">
+                                    <input type="number" name="qty-update" class="form-control" id="qtyUpdate" autofocus>
                                 </div>
                                 <div class="col-6">
                                     <label for="priceUpdate" class="form-label">Harga</label>
                                     <input type="number" name="price-Update" class="form-control" id="priceUpdate">
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
-                        <button type="button" class="btn btn-warning" id="updateCart">Update</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-warning" id="updateCart">Update</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -131,35 +132,38 @@
     </main>
 @endsection
 
-{{-- @push('style')
+@push('style')
     <style>
-        #dt.dataTable.no-footer {
-            border-bottom: unset;
-        }
+        /* #dt.dataTable.no-footer {
+                                    border-bottom: unset;
+                                }
 
-        #dt tbody td {
-            display: block;
-            border: unset;
-        }
+                                #dt tbody td {
+                                    display: block;
+                                    border: unset;
+                                }
 
-        #dt>tbody>tr>td {
-            border-top: unset;
-        }
+                                #dt>tbody>tr>td {
+                                    border-top: unset;
+                                }
 
-        .dataTables_paginate {
-            display: flex;
-            align-items: center;
-        }
+                                .dataTables_paginate {
+                                    display: flex;
+                                    align-items: center;
+                                }
 
-        .dataTables_paginate a {
-            padding: 0 10px;
-        }
+                                .dataTables_paginate a {
+                                    padding: 0 10px;
+                                }
 
-        img {
-            height: 180px;
+                                img {
+                                    height: 180px;
+                                } */
+        .qty {
+            width: 50px;
         }
     </style>
-@endpush --}}
+@endpush
 
 @push('script')
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -264,12 +268,52 @@
             $('#dt_filter').hide();
 
             $('#search').keyup(function() {
-                dt.search($(this).val()).draw();
+                var kode = $(this).val()
+
+                $.ajax({
+                    url: "{{ url('cashier') }}" + '/code',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "post",
+                    data: {
+                        code: kode
+                    },
+                    success: function(response) {
+                        var res = response.data
+
+                        if (res != null) {
+                            var id = res.id
+                            var name = res.name
+                            var price = res.price
+
+                            addToCart(id, name, price)
+                            $('#search').val('');
+                        } else {
+                            dt.search($(this).val()).draw();
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+                });
+
             });
 
         });
 
+        $(document).bind('keydown', function(event) {
+            if (event.keyCode == 191) {
+                event.preventDefault();
+
+                $('#search').focus();
+                return false;
+            }
+        });
+
         function addCart(id) {
+            $('#search').val('');
+
             $.ajax({
                 url: "{{ url('ajax/item') }}" + '/' + id,
             }).done(function(response) {
@@ -291,16 +335,17 @@
                 '        </button>' +
                 `    </td>` +
                 `    <td id="name-${id}">${name}</td>` +
-                `    <td class="qty-${id}">1</td>` +
+                `    <td><input type="number" class="qty" name="quantity[]" id="qty-${id}" value="1" data-id="${id}"></td>` +
                 `    <td class="price-${id}">${rupiah(price)}</td>` +
-                `    <input type="hidden" name="quantity[]" id="qty-${id}" value="1">` +
                 `    <input type="hidden" name="price[]" id="price-${id}" value="${price}">` +
                 `    <input type="hidden" name="total_item[]" id="total-item-${id}" value="${price}">` +
                 `    <input type="hidden" name="id[]" value="${id}">` +
                 '</tr>';
 
-            $(item).insertBefore('.cart-total');
+            $(item).insertAfter('.cart-first:last');
             $('.btn-' + id).hide();
+
+            $(`#qty-${id}`).focus();
 
             sumTotal();
         }
@@ -319,6 +364,8 @@
             form.find('#priceUpdate').val(price)
 
             $('#editModal').modal('show')
+            var form = $('#formUpdate')
+            form.find('#qtyUpdate').focus()
         }
 
         $('#updateCart').on('click', function() {
@@ -332,12 +379,28 @@
             $('#qty-' + id).val(qty)
             $('#price-' + id).val(price)
             $('#total-item-' + id).val(priceQty)
-            $('.qty-' + id).html(qty)
+            // $('.qty-' + id).html(qty)
             $('.price-' + id).html(rupiah(priceQty))
 
             $('#editModal').modal('hide')
             sumTotal()
         })
+
+        // .qty change
+        $(document).on('change', '.qty', changeQty)
+
+        function changeQty() {
+            var id = $(this).data('id')
+            var qty = $(this).val()
+            var price = $('#price-' + id).val()
+
+            var priceQty = parseInt(price) * parseInt(qty)
+
+            $('#total-item-' + id).val(priceQty)
+            $('.price-' + id).html(rupiah(priceQty))
+
+            sumTotal()
+        }
 
         function sumTotal() {
             var AllPrice = $('.cart-data').find('input[name="total_item[]"]')
@@ -359,10 +422,13 @@
         }
 
         function clearItem() {
-            var cartTotal = $('.cart-total')
-            cartTotal.siblings().remove()
+            $('.cart-data').remove();
             $('#total').html(rupiah(0));
             $('#total-value').val(0);
+
+            // inpt amount_paid
+            $('input[name="amount_paid"]').val('');
+
 
             $('.btn-primary').show()
 
@@ -397,7 +463,7 @@
         });
 
         function getData(id) {
-            $.ajax({
+            $.post({
                 url: "{{ url('cashier') }}" + '/' + id + '/print',
             }).done(function(response) {
                 var res = response.data

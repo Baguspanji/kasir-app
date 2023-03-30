@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\App;
 use App\Models\Item;
 use App\Models\Transaction;
-use App\Helpers\ReceiptPrinter\ReceiptPrinter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,18 +55,19 @@ class CashierController extends Controller
             'created_by' => Auth::user()->name,
         ]);
 
-        foreach ($items as $value) {
-            $key = array_search($value->id, $request->id);
+        $items = collect($items);
+        foreach ($request->id as $key => $value) {
+            $item = $items->where('id', $value)->first();
 
-            $total_take_price += $value->take_price * $request->quantity[$key];
+            $total_take_price += $item->take_price * $request->quantity[$key];
             $total_price += $request->price[$key] * $request->quantity[$key];
 
             $detailCreated[] = [
                 'app_id' => Auth::user()->app_id,
                 'transaction_id' => $transaction->id,
-                'take_price' => $value->take_price,
+                'take_price' => $item->take_price,
                 'price' => $request->price[$key],
-                'item_id' => $value->id,
+                'item_id' => $item->id,
                 'quantity' => $request->quantity[$key],
                 'created_at' => now(),
             ];
@@ -112,8 +112,7 @@ class CashierController extends Controller
         // return $pdf->stream('Transaksi-' . date('Y-m-d-his') . '.pdf');
     }
 
-    public function print($id)
-    {
+    function print($id) {
         $app = App::where([
             'id' => Auth::user()->app_id,
         ])->first();
@@ -139,7 +138,7 @@ class CashierController extends Controller
         $amount_paid = $item->amount_paid;
         $total_price = $item->total_price;
 
-        $sendToPrint =  [
+        $sendToPrint = [
             'store_name' => $store_name,
             'store_address' => $store_address,
             'store_phone' => $store_phone,
@@ -191,5 +190,42 @@ class CashierController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function code(Request $request)
+    {
+        // ajax check
+        if (!$request->ajax()) {
+            return [
+                'status' => false,
+                'message' => 'Forbidden',
+            ];
+        }
+
+        $request->validate([
+            'code' => 'required|string',
+        ]);
+
+        $code = $request->code;
+
+        $item = Item::where(function ($query) use ($code) {
+            $query->where('code_1', $code)
+                ->orWhere('code_2', $code)
+                ->orWhere('code_3', $code)
+                ->orWhere('code_4', $code)
+                ->orWhere('code_5', $code)
+                ->orWhere('code_6', $code)
+                ->orWhere('code_7', $code)
+                ->orWhere('code_8', $code)
+                ->orWhere('code_9', $code)
+                ->orWhere('code_10', $code)
+                ->orWhere('name', $code);
+        })->where('app_id', Auth::user()->app_id)->first();
+
+        return [
+            'status' => true,
+            'message' => 'Get Data berhasil',
+            'data' => $item,
+        ];
     }
 }
