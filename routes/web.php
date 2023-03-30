@@ -22,7 +22,7 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
 
     Route::resource('cashier', CashierController::class);
     Route::get('/cashier/{cashier}/print', [CashierController::class, 'print'])->name('cashier.print');
-    Route::post('cashier/code', [CashierController::class, 'code'])->name('cashier.code');
+    Route::post('cashier/{blank}/code', [CashierController::class, 'code'])->name('cashier.code');
 
     Route::resource('item', ItemController::class);
     Route::get('/item/{item}/status', [ItemController::class, 'status'])->name('item.status');
