@@ -463,7 +463,13 @@
         $('#formSubmit').submit(function(e) {
             e.preventDefault();
 
-            $('#formSubmiBtn').attr('disabled', true)
+            var ids = $('input[name="id[]"]').map(function() {
+                return this.value;
+            }).get();
+
+            if (ids.length != 0) {
+                $('#formSubmiBtn').attr('disabled', true)
+            }
 
             var form = $(this);
             var token = $('meta[name="csrf-token"]').attr('content');
