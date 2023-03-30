@@ -271,7 +271,7 @@
                 var kode = $(this).val()
 
                 $.ajax({
-                    url: "{{ url('cashier') }}" + '123/code',
+                    url: "{{ url('cashier') }}" + '/123/code',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
