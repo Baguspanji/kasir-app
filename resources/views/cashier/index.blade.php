@@ -135,30 +135,30 @@
 @push('style')
     <style>
         /* #dt.dataTable.no-footer {
-                                                            border-bottom: unset;
-                                                        }
+                                                                border-bottom: unset;
+                                                            }
 
-                                                        #dt tbody td {
-                                                            display: block;
-                                                            border: unset;
-                                                        }
+                                                            #dt tbody td {
+                                                                display: block;
+                                                                border: unset;
+                                                            }
 
-                                                        #dt>tbody>tr>td {
-                                                            border-top: unset;
-                                                        }
+                                                            #dt>tbody>tr>td {
+                                                                border-top: unset;
+                                                            }
 
-                                                        .dataTables_paginate {
-                                                            display: flex;
-                                                            align-items: center;
-                                                        }
+                                                            .dataTables_paginate {
+                                                                display: flex;
+                                                                align-items: center;
+                                                            }
 
-                                                        .dataTables_paginate a {
-                                                            padding: 0 10px;
-                                                        }
+                                                            .dataTables_paginate a {
+                                                                padding: 0 10px;
+                                                            }
 
-                                                        img {
-                                                            height: 180px;
-                                                        } */
+                                                            img {
+                                                                height: 180px;
+                                                            } */
         .qty {
             width: 50px;
         }
@@ -331,52 +331,53 @@
                 ids = ['']
             }
 
-            ids.forEach(el => {
-                if (el == id) {
-                    var qty = $('#qty-' + id).val()
-                    var pri = $('#price-' + id).val()
+            // find id
+            var find = ids.find(el => el == id)
 
-                    $('#qty-' + id).val(parseInt(qty) + 1)
-                    $('#price-' + id).val(pri)
+            if (find) {
+                var qty = $('#qty-' + id).val()
+                var pri = $('#price-' + id).val()
 
-                    var priceQty = parseInt(price) * parseInt(qty)
-                    $('.price-' + id).html(rupiah(priceQty))
+                $('#qty-' + id).val(parseInt(qty) + 1)
+                $('#price-' + id).val(pri)
 
-                    var total = $('#total-value').val()
-                    $('#total-value').val(parseInt(total) + parseInt(price))
-                    $('.total').html(rupiah(parseInt($('#total-value').val())))
+                var priceQty = parseInt(price) * parseInt(qty)
+                $('.price-' + id).html(rupiah(priceQty))
 
-                    $(`#qty-${id}`).focus();
+                var total = $('#total-value').val()
+                $('#total-value').val(parseInt(total) + parseInt(price))
+                $('.total').html(rupiah(parseInt($('#total-value').val())))
 
-                    sumTotal();
+                $(`#qty-${id}`).focus();
 
-                } else {
-                    var item =
-                        `<tr class="item-${id} cart-data">` +
-                        `    <td>` +
-                        `        <button type="button" class="btn btn-sm btn-danger" onclick="removeItem(${id})">` +
-                        '           <i class="bi bi-trash"></i>' +
-                        '        </button>' +
-                        `        <button type="button" class="btn btn-sm btn-warning" onclick="editItem(this)" data-id="${id}">` +
-                        '           <i class="bi bi-pencil"></i>' +
-                        '        </button>' +
-                        `    </td>` +
-                        `    <td id="name-${id}">${name}</td>` +
-                        `    <td><input type="number" class="qty" name="quantity[]" id="qty-${id}" value="1" data-id="${id}"></td>` +
-                        `    <td class="price-${id}">${rupiah(price)}</td>` +
-                        `    <input type="hidden" name="price[]" id="price-${id}" value="${price}">` +
-                        `    <input type="hidden" name="total_item[]" id="total-item-${id}" value="${price}">` +
-                        `    <input type="hidden" name="id[]" value="${id}">` +
-                        '</tr>';
+                sumTotal();
 
-                    $(item).insertAfter('.cart-first:last');
-                    $('.btn-' + id).hide();
+            } else {
+                var item =
+                    `<tr class="item-${id} cart-data">` +
+                    `    <td>` +
+                    `        <button type="button" class="btn btn-sm btn-danger" onclick="removeItem(${id})">` +
+                    '           <i class="bi bi-trash"></i>' +
+                    '        </button>' +
+                    `        <button type="button" class="btn btn-sm btn-warning" onclick="editItem(this)" data-id="${id}">` +
+                    '           <i class="bi bi-pencil"></i>' +
+                    '        </button>' +
+                    `    </td>` +
+                    `    <td id="name-${id}">${name}</td>` +
+                    `    <td><input type="number" class="qty" name="quantity[]" id="qty-${id}" value="1" data-id="${id}"></td>` +
+                    `    <td class="price-${id}">${rupiah(price)}</td>` +
+                    `    <input type="hidden" name="price[]" id="price-${id}" value="${price}">` +
+                    `    <input type="hidden" name="total_item[]" id="total-item-${id}" value="${price}">` +
+                    `    <input type="hidden" name="id[]" value="${id}">` +
+                    '</tr>';
 
-                    $(`#qty-${id}`).focus();
+                $(item).insertAfter('.cart-first:last');
+                $('.btn-' + id).hide();
 
-                    sumTotal();
-                }
-            });
+                $(`#qty-${id}`).focus();
+
+                sumTotal();
+            }
         }
 
         function editItem(el) {
