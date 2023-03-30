@@ -270,7 +270,7 @@
             $('#search').keyup(function() {
                 var kode = $(this).val()
 
-                delay(function() {
+                setTimeout(function() {
                     $.ajax({
                         url: "{{ url('cashier') }}" + '/123/code',
                         headers: {
