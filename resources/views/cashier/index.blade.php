@@ -135,30 +135,30 @@
 @push('style')
     <style>
         /* #dt.dataTable.no-footer {
-                                    border-bottom: unset;
-                                }
+                                                            border-bottom: unset;
+                                                        }
 
-                                #dt tbody td {
-                                    display: block;
-                                    border: unset;
-                                }
+                                                        #dt tbody td {
+                                                            display: block;
+                                                            border: unset;
+                                                        }
 
-                                #dt>tbody>tr>td {
-                                    border-top: unset;
-                                }
+                                                        #dt>tbody>tr>td {
+                                                            border-top: unset;
+                                                        }
 
-                                .dataTables_paginate {
-                                    display: flex;
-                                    align-items: center;
-                                }
+                                                        .dataTables_paginate {
+                                                            display: flex;
+                                                            align-items: center;
+                                                        }
 
-                                .dataTables_paginate a {
-                                    padding: 0 10px;
-                                }
+                                                        .dataTables_paginate a {
+                                                            padding: 0 10px;
+                                                        }
 
-                                img {
-                                    height: 180px;
-                                } */
+                                                        img {
+                                                            height: 180px;
+                                                        } */
         .qty {
             width: 50px;
         }
@@ -283,19 +283,18 @@
                         var res = response.data
 
                         if (res != null) {
+                            $('#search').val('');
+
                             var id = res.id
                             var name = res.name
                             var price = res.price
 
                             addToCart(id, name, price)
-                            $('#search').val('');
                         } else {
-                            dt.search($(this).val()).draw();
+                            dt.search(kode).draw();
                         }
+
                     },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus, errorThrown);
-                    }
                 });
 
             });
@@ -324,30 +323,58 @@
         }
 
         function addToCart(id, name, price) {
-            var item =
-                `<tr class="item-${id} cart-data">` +
-                `    <td>` +
-                `        <button type="button" class="btn btn-sm btn-danger" onclick="removeItem(${id})">` +
-                '           <i class="bi bi-trash"></i>' +
-                '        </button>' +
-                `        <button type="button" class="btn btn-sm btn-warning" onclick="editItem(this)" data-id="${id}">` +
-                '           <i class="bi bi-pencil"></i>' +
-                '        </button>' +
-                `    </td>` +
-                `    <td id="name-${id}">${name}</td>` +
-                `    <td><input type="number" class="qty" name="quantity[]" id="qty-${id}" value="1" data-id="${id}"></td>` +
-                `    <td class="price-${id}">${rupiah(price)}</td>` +
-                `    <input type="hidden" name="price[]" id="price-${id}" value="${price}">` +
-                `    <input type="hidden" name="total_item[]" id="total-item-${id}" value="${price}">` +
-                `    <input type="hidden" name="id[]" value="${id}">` +
-                '</tr>';
+            var ids = $('input[name="id[]"]').map(function() {
+                return this.value;
+            }).get();
 
-            $(item).insertAfter('.cart-first:last');
-            $('.btn-' + id).hide();
+            if (ids.length == 0) {
+                ids = ['']
+            }
 
-            $(`#qty-${id}`).focus();
+            ids.forEach(el => {
+                if (el == id) {
+                    var qty = $('#qty-' + id).val()
+                    var pri = $('#price-' + id).val()
 
-            sumTotal();
+                    $('#qty-' + id).val(parseInt(qty) + 1)
+                    $('#price-' + id).val(pri)
+
+                    var priceQty = parseInt(price) * parseInt(qty)
+                    $('.price-' + id).html(rupiah(priceQty))
+
+                    var total = $('#total-value').val()
+                    $('#total-value').val(parseInt(total) + parseInt(price))
+                    $('.total').html(rupiah(parseInt($('#total-value').val())))
+
+                    sumTotal();
+
+                } else {
+                    var item =
+                        `<tr class="item-${id} cart-data">` +
+                        `    <td>` +
+                        `        <button type="button" class="btn btn-sm btn-danger" onclick="removeItem(${id})">` +
+                        '           <i class="bi bi-trash"></i>' +
+                        '        </button>' +
+                        `        <button type="button" class="btn btn-sm btn-warning" onclick="editItem(this)" data-id="${id}">` +
+                        '           <i class="bi bi-pencil"></i>' +
+                        '        </button>' +
+                        `    </td>` +
+                        `    <td id="name-${id}">${name}</td>` +
+                        `    <td><input type="number" class="qty" name="quantity[]" id="qty-${id}" value="1" data-id="${id}"></td>` +
+                        `    <td class="price-${id}">${rupiah(price)}</td>` +
+                        `    <input type="hidden" name="price[]" id="price-${id}" value="${price}">` +
+                        `    <input type="hidden" name="total_item[]" id="total-item-${id}" value="${price}">` +
+                        `    <input type="hidden" name="id[]" value="${id}">` +
+                        '</tr>';
+
+                    $(item).insertAfter('.cart-first:last');
+                    $('.btn-' + id).hide();
+
+                    $(`#qty-${id}`).focus();
+
+                    sumTotal();
+                }
+            });
         }
 
         function editItem(el) {
