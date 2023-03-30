@@ -346,6 +346,8 @@
                     $('#total-value').val(parseInt(total) + parseInt(price))
                     $('.total').html(rupiah(parseInt($('#total-value').val())))
 
+                    $(`#qty-${id}`).focus();
+
                     sumTotal();
 
                 } else {
