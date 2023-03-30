@@ -488,7 +488,7 @@
         });
 
         function getData(id) {
-            $.post({
+            $.get({
                 url: "{{ url('cashier') }}" + '/' + id + '/print',
             }).done(function(response) {
                 var res = response.data
