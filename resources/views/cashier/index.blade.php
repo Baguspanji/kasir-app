@@ -293,9 +293,10 @@
                         } else {
                             dt.search(kode).draw();
                         }
-
                     },
                     timeout: 1000,
+                })
+
             });
 
         });
