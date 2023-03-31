@@ -272,7 +272,6 @@
 
                 $.post("{{ url('cashier') }}" + '/123/code', {
                         code: kode
-                    }, {
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
