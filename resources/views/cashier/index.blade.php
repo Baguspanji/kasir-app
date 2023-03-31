@@ -135,30 +135,30 @@
 @push('style')
     <style>
         /* #dt.dataTable.no-footer {
-                                                                    border-bottom: unset;
-                                                                }
+                                                                                    border-bottom: unset;
+                                                                                }
 
-                                                                #dt tbody td {
-                                                                    display: block;
-                                                                    border: unset;
-                                                                }
+                                                                                #dt tbody td {
+                                                                                    display: block;
+                                                                                    border: unset;
+                                                                                }
 
-                                                                #dt>tbody>tr>td {
-                                                                    border-top: unset;
-                                                                }
+                                                                                #dt>tbody>tr>td {
+                                                                                    border-top: unset;
+                                                                                }
 
-                                                                .dataTables_paginate {
-                                                                    display: flex;
-                                                                    align-items: center;
-                                                                }
+                                                                                .dataTables_paginate {
+                                                                                    display: flex;
+                                                                                    align-items: center;
+                                                                                }
 
-                                                                .dataTables_paginate a {
-                                                                    padding: 0 10px;
-                                                                }
+                                                                                .dataTables_paginate a {
+                                                                                    padding: 0 10px;
+                                                                                }
 
-                                                                img {
-                                                                    height: 180px;
-                                                                } */
+                                                                                img {
+                                                                                    height: 180px;
+                                                                                } */
         .qty {
             width: 50px;
         }
@@ -270,33 +270,24 @@
             $('#search').keyup(function() {
                 var kode = $(this).val()
 
-                setTimeout(function() {
-                    $.ajax({
-                        url: "{{ url('cashier') }}" + '/123/code',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: "post",
-                        data: {
-                            code: kode
-                        },
-                        success: function(response) {
-                            var res = response.data
-
-                            if (res != null) {
-                                $('#search').val('');
-
-                                var id = res.id
-                                var name = res.name
-                                var price = res.price
-
-                                addToCart(id, name, price)
-                            } else {
-                                dt.search(kode).draw();
-                            }
-                        },
+                $.post("{{ url('cashier') }}" + '/123/code', {
+                        code: kode
                     })
-                }, 1500)
+                    .done(function(response) {
+                        var res = response.data
+
+                        if (res != null) {
+                            $('#search').val('');
+
+                            var id = res.id
+                            var name = res.name
+                            var price = res.price
+
+                            addToCart(id, name, price)
+                        } else {
+                            dt.search(kode).draw();
+                        }
+                    });
 
             });
 
