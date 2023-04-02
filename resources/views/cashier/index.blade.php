@@ -7,6 +7,10 @@
                 <div class="row pt-2 mb-4 mt-3 px-5">
                     <div class="input-group">
                         <input class="form-control" id="search" type="search" placeholder="Cari Barang" aria-label="Search">
+                        <form action="#" id="search-qr-form" class="d-none unset w-75">
+                            <input class="form-control" id="search-qr" type="search" placeholder="Cari Barang Scan"
+                                aria-label="Search">
+                        </form>
                         <span class="input-group-text" id="icon"><i class="bi bi-search"></i></span>
                     </div>
                 </div>
@@ -135,30 +139,31 @@
 @push('style')
     <style>
         /* #dt.dataTable.no-footer {
-                                                                    border-bottom: unset;
-                                                                }
+                border-bottom: unset;
+            }
 
-                                                                #dt tbody td {
-                                                                    display: block;
-                                                                    border: unset;
-                                                                }
+            #dt tbody td {
+                display: block;
+                border: unset;
+            }
 
-                                                                #dt>tbody>tr>td {
-                                                                    border-top: unset;
-                                                                }
+            #dt>tbody>tr>td {
+                border-top: unset;
+            }
 
-                                                                .dataTables_paginate {
-                                                                    display: flex;
-                                                                    align-items: center;
-                                                                }
+            .dataTables_paginate {
+                display: flex;
+                align-items: center;
+            }
 
-                                                                .dataTables_paginate a {
-                                                                    padding: 0 10px;
-                                                                }
+            .dataTables_paginate a {
+                padding: 0 10px;
+            }
 
-                                                                img {
-                                                                    height: 180px;
-                                                                } */
+            img {
+                height: 180px;
+            } */
+
         .qty {
             width: 50px;
         }
@@ -268,45 +273,64 @@
             $('#dt_filter').hide();
 
             $('#search').keyup(function() {
-                var kode = $(this).val()
-
-                setTimeout(function() {
-                    $.ajax({
-                        url: "{{ url('cashier') }}" + '/123/code',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: "post",
-                        data: {
-                            code: kode
-                        },
-                        success: function(response) {
-                            var res = response.data
-
-                            if (res != null) {
-                                $('#search').val('');
-
-                                var id = res.id
-                                var name = res.name
-                                var price = res.price
-
-                                addToCart(id, name, price)
-                            } else {
-                                dt.search(kode).draw();
-                            }
-                        },
-                    })
-                }, 1500)
-
+                dt.search($(this).val()).draw();
             });
+        });
+
+        $('#search-qr-form').submit(function(e) {
+            e.preventDefault();
+            var kode = $('#search-qr').val()
+
+            $.ajax({
+                url: "{{ url('cashier') }}" + '/123/code',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "post",
+                data: {
+                    code: kode
+                },
+                success: function(response) {
+                    var res = response.data
+
+                    if (res != null) {
+                        $('#search-qr').val('');
+
+                        var id = res.id
+                        var name = res.name
+                        var price = res.price
+
+                        addToCart(id, name, price)
+                    } else {
+                        dt.search(kode).draw();
+                    }
+                },
+            })
 
         });
 
         $(document).bind('keydown', function(event) {
+            var search = $('#search')
+            var searchQr = $('#search-qr-form')
+            var icon = $('#icon')
+
             if (event.keyCode == 191) {
                 event.preventDefault();
 
-                $('#search').focus();
+                searchQr.addClass('d-none')
+                search.attr('type', 'search')
+                icon.find('i').removeClass('bi-qr-code-scan').addClass('bi-search')
+
+                search.focus();
+                return false;
+            } else if (event.keyCode == 190) {
+                event.preventDefault();
+
+                searchQr.removeClass('d-none')
+                search.attr('type', 'hidden')
+                icon.find('i').removeClass('bi-search').addClass('bi-qr-code-scan')
+
+                $('#search-qr').focus();
                 return false;
             }
         });
