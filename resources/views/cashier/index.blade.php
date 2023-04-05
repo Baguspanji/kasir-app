@@ -352,22 +352,20 @@
                 return this.value;
             }).get();
 
+
             var find = ids.find(el => el == id)
 
             if (find) {
+                console.log(find);
                 var qty = $('#qty-' + id).val()
                 var pri = $('#price-' + id).val()
 
                 $('#qty-' + id).val(parseInt(qty) + 1)
                 $('#price-' + id).val(pri)
 
-                var priceQty = parseInt(pri) * parseInt(qty)
+                var priceQty = parseInt(pri) * (parseInt(qty) + 1)
                 $('#total-item-' + id).val(priceQty)
                 $('.price-' + id).html(rupiah(priceQty))
-
-                var total = $('#total-value').val()
-                $('#total-value').val(parseInt(total) + parseInt(pri))
-                $('.total').html(rupiah(parseInt($('#total-value').val())))
 
                 $(`#qty-${id}`).focus();
 
