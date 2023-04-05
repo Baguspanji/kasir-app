@@ -361,12 +361,12 @@
                 $('#qty-' + id).val(parseInt(qty) + 1)
                 $('#price-' + id).val(pri)
 
-                var priceQty = parseInt(price) * parseInt(qty)
+                var priceQty = parseInt(pri) * parseInt(qty)
                 $('#total-item-' + id).val(priceQty)
                 $('.price-' + id).html(rupiah(priceQty))
 
                 var total = $('#total-value').val()
-                $('#total-value').val(parseInt(total) + parseInt(price))
+                $('#total-value').val(parseInt(total) + parseInt(pri))
                 $('.total').html(rupiah(parseInt($('#total-value').val())))
 
                 $(`#qty-${id}`).focus();
