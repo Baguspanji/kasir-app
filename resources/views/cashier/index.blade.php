@@ -362,6 +362,7 @@
                 $('#price-' + id).val(pri)
 
                 var priceQty = parseInt(price) * parseInt(qty)
+                $('#total-item-' + id).val(priceQty)
                 $('.price-' + id).html(rupiah(priceQty))
 
                 var total = $('#total-value').val()
