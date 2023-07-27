@@ -22,7 +22,7 @@ Route::group(['middleware' => ['auth:users']], function () {
     Route::get('/dashboard', [HomeController::class, 'index']);
 
     Route::apiResource('item', ItemController::class);
-    Route::post('item/{item}/status', [ItemController::class, 'status']);
+    // Route::post('item/{item}/status', [ItemController::class, 'status']);
 
     Route::get('unit', [UnitController::class, 'index']);
 
