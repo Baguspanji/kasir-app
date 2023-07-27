@@ -16,25 +16,26 @@ class ItemController extends Controller
         $status = request()->query('status') ?? true;
         $keyword = request()->query('keyword') ?? null;
 
-        $datas = Item::when(!is_null($keyword),
-            fn($q) =>
-            $q->where('code_1', 'like', '%' . $keyword . '%')
-                ->orWhere('code_2', 'like', '%' . $keyword . '%')
-                ->orWhere('code_3', 'like', '%' . $keyword . '%')
-                ->orWhere('code_4', 'like', '%' . $keyword . '%')
-                ->orWhere('code_5', 'like', '%' . $keyword . '%')
-                ->orWhere('code_6', 'like', '%' . $keyword . '%')
-                ->orWhere('code_7', 'like', '%' . $keyword . '%')
-                ->orWhere('code_8', 'like', '%' . $keyword . '%')
-                ->orWhere('code_9', 'like', '%' . $keyword . '%')
-                ->orWhere('code_10', 'like', '%' . $keyword . '%')
-                ->orWhere('name', 'like', '%' . $keyword . '%')
-        )
-            ->where([
-                'app_id' => Auth::user()->app_id,
-                'status' => $status,
-            ])
-            ->orderBy('created_at', 'DESC');
+        $datas = Item::where([
+            'app_id' => Auth::user()->app_id,
+            'status' => $status,
+        ])->orderBy('created_at', 'DESC');
+
+        if ($keyword != null) {
+            $datas->where(function ($q) use ($keyword) {
+                $q->where('code_1', 'like', '%' . $keyword . '%')
+                    ->orWhere('code_2', 'like', '%' . $keyword . '%')
+                    ->orWhere('code_3', 'like', '%' . $keyword . '%')
+                    ->orWhere('code_4', 'like', '%' . $keyword . '%')
+                    ->orWhere('code_5', 'like', '%' . $keyword . '%')
+                    ->orWhere('code_6', 'like', '%' . $keyword . '%')
+                    ->orWhere('code_7', 'like', '%' . $keyword . '%')
+                    ->orWhere('code_8', 'like', '%' . $keyword . '%')
+                    ->orWhere('code_9', 'like', '%' . $keyword . '%')
+                    ->orWhere('code_10', 'like', '%' . $keyword . '%')
+                    ->orWhere('name', 'like', '%' . $keyword . '%');
+            });
+        }
 
         $response = [
             'message' => 'Berhasil mendapat data item',
@@ -88,7 +89,7 @@ class ItemController extends Controller
             ];
 
             return response()->json($response, 201);
-        } catch (\Throwable$th) {
+        } catch (\Throwable $th) {
             DB::rollBack();
             $response = [
                 'message' => 'Gagal menambahkan item',
@@ -152,7 +153,7 @@ class ItemController extends Controller
             ];
 
             return response()->json($response, 201);
-        } catch (\Throwable$th) {
+        } catch (\Throwable $th) {
             DB::rollBack();
             $response = [
                 'message' => 'Gagal mengubah item',
@@ -211,7 +212,7 @@ class ItemController extends Controller
             ];
 
             return response()->json($response, 201);
-        } catch (\Throwable$th) {
+        } catch (\Throwable $th) {
             DB::rollBack();
             $response = [
                 'message' => 'Gagal menghapus item',
@@ -237,7 +238,7 @@ class ItemController extends Controller
             ];
 
             return response()->json($response, 201);
-        } catch (\Throwable$th) {
+        } catch (\Throwable $th) {
             DB::rollBack();
             $response = [
                 'message' => 'Gagal mengubah status item',
