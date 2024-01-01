@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::get('/item/{item}/status', [ItemController::class, 'status'])->name('item.status');
 
     Route::get('transaction', [TransactionController::class, 'index'])->name('transaction.index');
+    Route::get('transaction/share/{id}', [TransactionController::class, 'share'])->name('transaction.share');
     Route::get('transaction/income', [TransactionController::class, 'income'])->name('transaction.income');
     Route::get('transaction/income/export', [TransactionController::class, 'export'])->name('transaction.export');
 });

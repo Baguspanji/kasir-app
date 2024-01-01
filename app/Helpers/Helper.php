@@ -7,7 +7,7 @@ if (!function_exists('tanggal')) {
         $tanggal = substr($ex[0], 8, 2);
         $bulan = bulan(substr($ex[0], 5, 2));
         $tahun = substr($ex[0], 0, 4);
-        return $tanggal . ' ' . $bulan . ' ' . $tahun . ', ' . $ex[1];
+        return $tanggal . ' ' . $bulan . ' ' . $tahun . ', ' . substr($ex[1], 0, 5);
     }
 }
 

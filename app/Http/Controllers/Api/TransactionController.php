@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -107,7 +108,7 @@ class TransactionController extends Controller
             ];
 
             return response()->json($response, 201);
-        } catch (\Exception$e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             $response = [
                 'message' => 'Gagal menambahkan transaksi',
@@ -210,7 +211,7 @@ class TransactionController extends Controller
             ];
 
             return response()->json($response, 201);
-        } catch (\Exception$e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             $response = [
                 'message' => 'Gagal update transaksi',
@@ -333,7 +334,7 @@ class TransactionController extends Controller
         $name = 'laporan-' . $date->format('Y-m-d') . '.xlsx';
         try {
             return Excel::download($export, $name);
-        } catch (\Exception$e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
         // if (!file_exists(storage_path('app/public/export/' . $name))) {
@@ -350,5 +351,38 @@ class TransactionController extends Controller
         // );
 
         // return response()->download(storage_path('app/public/export/' . $name), $name, $headers);
+    }
+
+    public function share($id)
+    {
+        $data = Transaction::with([
+            'details',
+            'details.item',
+        ])
+            ->where([
+                'app_id' => Auth::user()->app_id,
+                'id' => $id
+            ])
+            ->first();
+
+        // return $data;
+
+        $pathPdf = storage_path('app/public/share/' . auth()->user()->username . '-invoice.pdf');
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.invoice', compact('data'));
+        $long_item = (count($data->details) * 16);
+        $pdf->setPaper(array(0, 0, 180, 160 + $long_item), 'portrait');
+        $pdf->save($pathPdf);
+
+        $pathStorage = 'share/' . auth()->user()->username . '-invoice.jpg';
+        $pdfImage = new \Spatie\PdfToImage\Pdf($pathPdf);
+        $pdfImage->setResolution(300);
+        $pdfImage->saveImage(storage_path('app/public/' . $pathStorage));
+        // return $pdf->stream();
+        $response = [
+            'message' => 'Berhasil mendapat url item',
+            'data' => URL::to('/') . '/storage/' . $pathStorage,
+        ];
+
+        return response()->json($response, 200);
     }
 }

@@ -56,6 +56,9 @@
                                             <button class="btn btn-sm btn-primary"
                                                 onclick="getData({{ $item->id }})">Cetak
                                                 Struk</button>
+                                            {{-- <a class="btn btn-sm btn-info text-white"
+                                                href="{{ route('transaction.share', $item->id) }}">Share
+                                                Struk</a> --}}
                                         </td>
                                     </tr>
                                 @endforeach

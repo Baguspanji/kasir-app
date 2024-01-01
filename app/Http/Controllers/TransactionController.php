@@ -108,4 +108,29 @@ class TransactionController extends Controller
         // return $export->map($dataExport);
         return Excel::download($export, 'laporan-' . Carbon::now()->format('Y-m-d') . '.xlsx');
     }
+
+    public function share($id)
+    {
+        $data = Transaction::with([
+            'details',
+            'details.item',
+        ])
+            ->where([
+                'app_id' => Auth::user()->app_id,
+                'id' => $id
+            ])
+            ->first();
+
+        // return $data;
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.invoice', compact('data'));
+        $long_item = (count($data->details) * 16);
+        $pdf->setPaper(array(0, 0, 180, 160 + $long_item), 'portrait');
+        $pathToPdf = storage_path('app/public/share/invoice.pdf');
+        $pdf->save($pathToPdf);
+
+        $pdfImage = new \Spatie\PdfToImage\Pdf($pathToPdf);
+        $pdfImage->saveImage(storage_path('app/public/share/invoice.jpg'));
+        return $pdf->stream();
+    }
 }
