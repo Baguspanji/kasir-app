@@ -16,13 +16,13 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/css/app.css', 'resources/js/app.js'])
+
+    @stack('style')
 </head>
 
 <body>
     <div id="app">
-        <main class="py-4">
             @yield('content')
-        </main>
     </div>
 </body>
 
