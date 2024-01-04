@@ -1,76 +1,90 @@
-<div class="container">
-    <header class="blog-header py-3">
-        <div class="row flex-nowrap justify-content-between align-items-center">
-            {{-- <div class="col-4 pt-1">
-                <a class="link-secondary" href="#">Subscribe</a>
-            </div> --}}
-            <div class="col-8">
-                <a class="blog-header-logo text-dark" href="#">{{ auth()->user()->app->name }}</a>
-            </div>
-            <div class="col-4 d-flex justify-content-end align-items-center">
-                <a class="btn btn-sm btn-outline-secondary" href="{{ route('logout') }}"
-                    onclick="event.preventDefault();
-                document.getElementById('logout-form').submit();">
-                    Keluar
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
-            </div>
-        </div>
-    </header>
+<nav class="navbar navbar-expand-lg bg-body-tertiary mb-3">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
 
-    <div class="py-1 mb-4 border-bottom">
-        <nav class="navbar navbar-expand-lg navbar-light bg-default">
-            <div class="container-fluid">
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <a class="p-2 nav-link {{ request()->is('home*') ? 'active' : '' }}"
-                            href="{{ url('home') }}"><i class="bi bi-house"></i>
-                            Beranda</a>
+                </li>
+            </ul>
 
-                        <a class="p-2 nav-link {{ request()->is('cashier*') ? 'active' : '' }}"
-                            href="{{ route('cashier.index') }}"><i class="bi bi-cart"></i> Kasir</a>
+            <ul class="navbar-nav">
+                <li class="nav-item p-2 mt-1">
+                    <a type="button" data-bs-toggle="dropdown" aria-expanded="true" data-bs-display="notif">
+                        <div class="border border-gray-800 rounded-4" style="padding: 8px 14px;">
+                            <i class="bi bi-bell-fill" style="font-size: 16pt;"></i>
+                            <span class="position-absolute translate-middle badge rounded-pill bg-danger"
+                                style="top: 10px;">
+                                8
+                            </span>
+                        </div>
+                    </a>
 
-                        {{-- <a class="p-2 nav-link {{ request()->is('shopping*') ? 'active' : '' }}"
-                            href="{{ route('shopping.index') }}"><i class="bi bi-building"></i>
-                            Pembelajaan</a> --}}
+                    <ul class="dropdown-menu dropdown-menu-end" data-bs-popper="notif" style="width: 500px;">
+                        <template v-for="(item, index) in listNotif" :key="item.id">
+                            <li class="bg-light py-2 px-3 row">
+                                <div class="col-11">
+                                    <CardMeta :title="item.data.title" :description="item.data.message" />
+                                </div>
+                                <div class="col-1">
+                                    <a href="#">
+                                        <IconId :size="25" stroke-width="1" color="#16b3ac" />
+                                    </a>
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
+                </li>
 
-                        <a class="p-2 nav-link {{ request()->is('item*') ? 'active' : '' }}"
-                            href="{{ route('item.index') }}">
-                            <i class="bi bi-basket"></i>
-                            Barang</a>
+                <li class="nav-item dropdown">
+                    <a type="button" class="btn btn-link" data-bs-toggle="dropdown" aria-expanded="true"
+                        data-bs-display="static" style="margin: 12px 18px 0 10px; padding: 0;">
+                        <img src="https://sadj.reactai.com/mpa/img/demo/avatars/avatar-admin.png"
+                            class="profile-image rounded-4">
+                    </a>
 
-                        @can('is_admin')
-                            <div class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-card-text"></i> Laporan
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    {{-- <li><a class="dropdown-item" href="{{ route('user.index') }}">User</a></li> --}}
-                                    {{-- <li>
-                                        <hr class="dropdown-divider">
-                                    </li> --}}
-                                    <li>
-                                        <a class="dropdown-item {{ request()->is('transaction') ? 'active' : '' }}"
-                                            href="{{ route('transaction.index') }}">Transaksi</a>
-                                    </li>
-                                    <li><a class="dropdown-item {{ request()->is('transaction/income') ? 'active' : '' }}"
-                                            href="{{ route('transaction.income') }}">Pemasukan</a></li>
-                                    {{-- <li><a class="dropdown-item" href="#">Pengeluaran</a></li> --}}
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    {{-- <li><a class="dropdown-item" href="#">Master Data</a></li> --}}
-                                    <li><a class="dropdown-item {{ request()->is('setting*') ? 'active' : '' }}"
-                                            href="{{ route('setting') }}">Pengaturan Toko</a></li>
-                                </ul>
+                    <ul class="dropdown-menu dropdown-menu-end" data-bs-popper="static">
+                        <li class="dropdown-header bg-trans-gradient">
+                            <div class="d-flex flex-row align-items-center color-white">
+                                <span class="me-2">
+                                    <img src="https://sadj.reactai.com/mpa/img/demo/avatars/avatar-admin.png"
+                                        class="rounded-circle profile-image">
+                                </span>
+                                <div class="info-card-text">
+                                    <div class="text-truncate text-truncate-lg fs-small fw-bold">
+                                        Admin Kasir
+                                    </div>
+                                    <span class="text-truncate text-truncate-md opacity-80 fs-xsmall">
+                                        Admin
+                                    </span>
+                                </div>
                             </div>
-                        @endcan
-                    </div>
-                </div>
-            </div>
-        </nav>
+                        </li>
+                        <li class="bg-gradient mt-1">
+                            <a href="#" class="dropdown-item py-2">
+                                <IconUserCircle :size="18" class="me-2" />Profil
+                            </a>
+                        </li>
+                        <li class="bg-gradient mt-1">
+                            <a href="#" class="dropdown-item py-2">
+                                <IconKey :size="18" class="me-2" />Ubah Password
+                            </a>
+                        </li>
+                        <li class="bg-gradient">
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="bg-gradient logout">
+                            <a class="dropdown-item" href="javascript:void()"
+                                onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();">
+                                <IconLogout :size="18" class="me-2" />Keluar
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
+</nav>

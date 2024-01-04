@@ -24,13 +24,23 @@
     <script src="{{ asset('assets/vendor/notyf.min.js') }}"></script>
 
     @stack('style')
+
+    <style></style>
 </head>
 
 <body>
     <div id="app">
-        @include('layouts.navbar')
+        <div class="wrapper d-flex align-items-stretch">
+            @include('layouts.sidebar')
 
-        @yield('content')
+            <div class="main">
+                @include('layouts.navbar')
+
+                <div class="content">
+                    @yield('content')
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>

@@ -1,24 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
-    <main class="container">
-
+    <div class="container">
         <div class="row g-5 mb-4">
             <div class="col-md-12">
 
-                <div class="row justify-content-end">
-                    <div class="col-md-6">
-                        @can('is_admin')
-                            <a href="{{ route('item.create') }}" class="btn btn-primary float-end">
-                                <i class="bi bi-plus-lg"></i> Tambah Data
-                            </a>
-                        @endcan
+                <div class="card rounded-4 shadow-lg">
+                    <div class="card-body">
+                        <div class="row justify-content-end">
+                            <div class="col-md-6">
+                                <h2 class="fw-bold p-0 m-0">Daftar Item</h2>
+                            </div>
+                            <div class="col-md-6">
+                                @can('is_admin')
+                                    <a href="{{ route('item.create') }}" class="btn btn-primary float-end rounded-3">
+                                        Tambah Item
+                                    </a>
+                                @endcan
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card mt-2">
+                <div class="card rounded-4 shadow-lg mt-2">
                     <div class="card-body">
-                        <table class="table" id="dt">
+                        <table class="table table-bordered nowrap py-3" id="dt">
                             <thead class="text-center">
                                 <tr>
                                     <th scope="col">#</th>
@@ -61,15 +67,16 @@
                                         <td>
                                             @if ($item->status)
                                                 <a href="{{ route('item.status', $item->id) }}"
-                                                    class="btn btn-sm btn-primary">Aktif</a>
+                                                    class="btn btn-sm btn-primary rounded-3">Aktif</a>
                                             @else
                                                 <a href="{{ route('item.status', $item->id) }}"
-                                                    class="btn btn-sm btn-danger">Aktif</a>
+                                                    class="btn btn-sm btn-danger rounded-3">Non-aktif</a>
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('item.edit', $item->id) }}" class="btn btn-warning btn-sm"><i
-                                                    class="bi bi-pencil-square"></i> Edit</a>
+                                            <a href="{{ route('item.edit', $item->id) }}"
+                                                class="btn btn-warning btn-sm rounded-3"><i class="bi bi-pencil-square"></i>
+                                                Edit</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -84,6 +91,19 @@
     </main>
 @endsection
 
+@push('style')
+    <style>
+        .table thead th {
+            font-weight: 600;
+        }
+    </style>
+    <style>
+        .table tbody td {
+            vertical-align: middle;
+        }
+    </style>
+@endpush
+
 @push('script')
     <script type="text/javascript">
         $(document).ready(function() {
@@ -93,11 +113,10 @@
                 lengthChange: false,
                 deferRender: true,
                 processing: true,
+                oLanguage: {
+                    "sSearch": "Cari Item"
+                }
             });
-
-            $('#addStokBtn').click(function() {
-                $('#addStok').modal('show');
-            })
         });
     </script>
 @endpush

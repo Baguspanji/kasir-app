@@ -1,27 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
-    <main class="container">
-
+    <div class="container">
         <div class="row g-5 mb-4">
             <div class="col-md-12">
-
-                @can('is_admin')
-                    <form class="row justify-content-end" action="{{ route('transaction.index') }}" method="GET">
-                        <div class="col-md-2">
-                            <input class="form-control bg-white" type="month" name="date" id="date">
-                        </div>
-                        <div class="col-md-1">
-                            <button type="submit" class="btn btn-primary float-end">
-                                <i class="bi bi-database"></i> Lihat
-                            </button>
-                        </div>
-                    </form>
-                @endcan
-
-                <div class="card mt-2">
+                <div class="card rounded-4 shadow-lg">
                     <div class="card-body">
-                        <table class="table" id="dt">
+                        <div class="row justify-content-between">
+                            <div class="col-md-6">
+                                <h2 class="fw-bold p-0 m-0">Daftar Transaksi</h2>
+                            </div>
+                            <div class="col-md-4 d-flex justify-content-between">
+                                @can('is_admin')
+                                    <form action="{{ route('transaction.index') }}" method="GET" id="search-date">
+                                        <input class="form-control bg-white w-100" type="month" name="date" id="date">
+                                    </form>
+                                    <button type="button" class="btn btn-primary w-50"
+                                        onclick="document.getElementById('search-date').submit();">
+                                        <i class="bi bi-database"></i> Lihat
+                                    </button>
+                                @endcan
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card rounded-4 shadow-lg mt-2">
+                    <div class="card-body">
+                        <table class="table table-bordered nowrap py-3" id="dt">
                             <thead class="text-center">
                                 <tr>
                                     <th scope="col">#</th>
@@ -68,10 +74,21 @@
                 </div>
             </div>
         </div>
-        </div>
-
-    </main>
+    </div>
 @endsection
+
+@push('style')
+    <style>
+        .table thead th {
+            font-weight: 600;
+        }
+    </style>
+    <style>
+        .table tbody td {
+            vertical-align: middle;
+        }
+    </style>
+@endpush
 
 @push('script')
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -84,15 +101,12 @@
                 lengthChange: false,
                 deferRender: true,
                 processing: true,
+                oLanguage: {
+                    "sSearch": "Cari Transaksi"
+                }
             });
-
-            $('#addStokBtn').click(function() {
-                $('#addStok').modal('show');
-            })
         });
-    </script>
 
-    <script>
         function getData(id) {
             $.ajax({
                 url: "{{ url('cashier') }}" + '/' + id + '/print',

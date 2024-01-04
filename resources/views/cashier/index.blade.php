@@ -1,139 +1,154 @@
 @extends('layouts.app')
 
 @section('content')
-    <main class="container">
-        <div class="row g-5 mb-4">
-            <div class="col-md-8">
-                <div class="row pt-2 mb-4 mt-3 px-5">
-                    <div class="input-group">
-                        <input class="form-control" id="search" type="search" placeholder="Cari Barang" aria-label="Search">
-                        <form action="#" id="search-qr-form" class="d-none unset w-75">
-                            <input class="form-control" id="search-qr" type="search" placeholder="Cari Barang Scan"
-                                aria-label="Search">
-                        </form>
-                        <span class="input-group-text" id="icon"><i class="bi bi-search"></i></span>
+    <div class="container">
+        <div class="row g-2 mb-4">
+            <div class="col-md-12">
+                <div class="card rounded-4 shadow-lg">
+                    <div class="card-body">
+                        <div class="row justify-content-between">
+                            <div class="col-md-6">
+                                <h2 class="fw-bold p-0 m-0">Menu Kasir</h2>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div id="produk" class="row g-5">
-                    <table id="dt" class="table w-100">
-                        <thead>
-                            <tr>
-                                <th>Kode</th>
-                                <th>Nama</th>
-                                <th>Unit</th>
-                                <th>Harga</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+            <div class="col-md-8">
+                <div class="card rounded-4 shadow-lg mt-2">
+                    <div class="card-body">
+                        <div class="input-group">
+                            <input class="form-control" id="search" type="search" placeholder="Cari Barang"
+                                aria-label="Search">
+                            <form action="#" id="search-qr-form" class="d-none unset w-75">
+                                <input class="form-control" id="search-qr" type="search" placeholder="Cari Barang Scan"
+                                    aria-label="Search">
+                            </form>
+                        </div>
+
+                        <div id="produk" class="row g-5">
+                            <table id="dt" class="table w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Kode</th>
+                                        <th>Nama</th>
+                                        <th>Unit</th>
+                                        <th>Harga</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="col-md-4">
-                @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <strong>Whoops!</strong> Ada yang error saat membuat pesanan.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+                <div class="card rounded-4 shadow-lg mt-2">
+                    <div class="card-body">
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <strong>Whoops!</strong> Ada yang error saat membuat pesanan.<br><br>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <div class="position-sticky" style="top: 2rem;">
+                            <form id="formSubmit">
+                                @csrf
+
+                                <div class="row justify-content-between" style="vertical-align: middle;">
+                                    <div class="col-4">
+                                        <h4 class="fw-bold">Keranjang</h4>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                            name="name" value="{{ old('name', isset($post->name) ? $post->name : '') }}"
+                                            placeholder="Pemesan">
+                                    </div>
+                                </div>
+                                <table class="table">
+                                    <thead class="text-center">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Barang</th>
+                                            <th scope="col">Qty</th>
+                                            <th scope="col">Jumlah</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <tr class="cart-first"></tr>
+                                        <tr class="cart-total">
+                                            <td colspan="3" class="fw-bold">Total</td>
+                                            <td id="total">Rp. 0</td>
+                                            <input type="hidden" id="total-value" value="0">
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="row justify-content-between">
+                                    <div class="col-6">
+                                        <input type="number"
+                                            class="form-control @error('amount_paid') is-invalid @enderror"
+                                            name="amount_paid"
+                                            value="{{ old('amount_paid', isset($post->amount_paid) ? $post->amount_paid : '') }}"
+                                            placeholder="Bayar">
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="submit" id="formSubmiBtn"
+                                            class="btn btn-success btn-sm float-end mt-1"><i class="bi bi-cash"></i>
+                                            Proses</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                @endif
-
-                <div class="position-sticky" style="top: 2rem;">
-                    <form id="formSubmit">
-                        @csrf
-
-                        <div class="p-4 pb-5 bg-light rounded">
-                            <div class="row justify-content-between">
-                                <div class="col-4">
-                                    <h4>Keranjang</h4>
-                                </div>
-                                <div class="col-6">
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" value="{{ old('name', isset($post->name) ? $post->name : '') }}"
-                                        placeholder="Pemesan">
-                                </div>
-                            </div>
-                            <table class="table">
-                                <thead class="text-center">
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Barang</th>
-                                        <th scope="col">Qty</th>
-                                        <th scope="col">Jumlah</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-center">
-                                    <tr class="cart-first"></tr>
-                                    <tr class="cart-total">
-                                        <td colspan="3" class="fw-bold">Total</td>
-                                        <td id="total">Rp. 0</td>
-                                        <input type="hidden" id="total-value" value="0">
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <div class="row justify-content-between">
-                                <div class="col-6">
-                                    <input type="number" class="form-control @error('amount_paid') is-invalid @enderror"
-                                        name="amount_paid"
-                                        value="{{ old('amount_paid', isset($post->amount_paid) ? $post->amount_paid : '') }}"
-                                        placeholder="Bayar">
-                                </div>
-                                <div class="col-4">
-                                    <button type="submit" id="formSubmiBtn"
-                                        class="btn btn-success btn-sm float-end mt-1"><i class="bi bi-cash"></i>
-                                        Proses</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <form id="formUpdate">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Edit Keranjang</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="hidden" name="id-update" id="idUpdate">
-                            <div class="mb-3">
-                                <label for="nameUpdate" class="form-label">Nama Barang</label>
-                                <input type="text" name="name-update" class="form-control" id="nameUpdate" readonly>
-                            </div>
-
-                            <div class="mb-3 row">
-                                <div class="col-6">
-                                    <label for="qtyUpdate" class="form-label">Qty</label>
-                                    <input type="number" name="qty-update" class="form-control" id="qtyUpdate" autofocus>
-                                </div>
-                                <div class="col-6">
-                                    <label for="priceUpdate" class="form-label">Harga</label>
-                                    <input type="number" name="price-Update" class="form-control" id="priceUpdate">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
-                            <button type="button" class="btn btn-warning" id="updateCart">Update</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
+    </div>
 
-    </main>
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="formUpdate">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit Keranjang</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id-update" id="idUpdate">
+                        <div class="mb-3">
+                            <label for="nameUpdate" class="form-label">Nama Barang</label>
+                            <input type="text" name="name-update" class="form-control" id="nameUpdate" readonly>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <div class="col-6">
+                                <label for="qtyUpdate" class="form-label">Qty</label>
+                                <input type="number" name="qty-update" class="form-control" id="qtyUpdate" autofocus>
+                            </div>
+                            <div class="col-6">
+                                <label for="priceUpdate" class="form-label">Harga</label>
+                                <input type="number" name="price-Update" class="form-control" id="priceUpdate">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-warning" id="updateCart">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('style')

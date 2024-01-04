@@ -1,17 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-    <main class="container">
-
-        <div class="row mb-4">
-            <div class="col-md-12 d-flex justify-content-between mb-2">
-                <h4>Update Profile</h4>
-                <div>
+    <div class="container">
+        <div class="row g-5 mb-4">
+            <div class="col-md-12">
+                <div class="card rounded-4 shadow-lg">
+                    <div class="card-body">
+                        <div class="row justify-content-between">
+                            <div class="col-md-6">
+                                <h2 class="fw-bold p-0 m-0">Pengaturan Kasir</h2>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="offset-3 col-md-6">
-                <div class="card mt-2">
+                <div class="card rounded-4 shadow-lg mt-2">
                     <div class="card-body">
                         <form action="{{ route('setting.update') }}" method="POST" id="formData">
                             @csrf
@@ -102,7 +105,7 @@
 
                             <div class="mb-3 row">
                                 <label for="message" class="form-label">Pesan</label>
-                                <div class="col-10">
+                                <div class="col-11">
                                     <input type="text" name="message"
                                         class="form-control @error('message') is-invalid @enderror" id="message"
                                         value="{{ old('message', isset($post->message) ? $post->message : '') }}"
@@ -115,8 +118,8 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-2">
-                                    <button type="button" class="btn btn-primary" id="addMessage"><i
+                                <div class="col-1">
+                                    <button type="button" class="btn btn-primary float-end" id="addMessage"><i
                                             class="bi bi-plus-lg"></i></button>
                                 </div>
                             </div>
@@ -132,7 +135,7 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">Pesan</th>
-                                            <th scope="col">Aksi</th>
+                                            <th scope="col" class="text-center">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -140,8 +143,7 @@
                             </div>
 
                             <div class="my-4 d-flex justify-content-center">
-                                <button type="submit"
-                                    class="btn btn-{{ isset($post) ? 'warning' : 'primary' }} w-50">{{ isset($post) ? 'Update' : 'Simpan' }}</button>
+                                <button type="submit" class="btn btn-primary w-50">Simpan</button>
                             </div>
 
                         </form>
@@ -149,38 +151,36 @@
                 </div>
             </div>
         </div>
+    @endsection
 
-    </main>
-@endsection
+    @push('script')
+        <script type="text/javascript">
+            var messages = @json(isset($post) ? $post->messages : []);
 
-@push('script')
-    <script type="text/javascript">
-        var messages = @json(isset($post) ? $post->messages : []);
+            messages.forEach(function(message) {
+                addMessage(message);
+            });
 
-        messages.forEach(function(message) {
-            addMessage(message);
-        });
+            $('#addMessage').click(function() {
+                var message = $('#message').val();
 
-        $('#addMessage').click(function() {
-            var message = $('#message').val();
+                addMessage(message);
+                $('#message').val('');
+            });
 
-            addMessage(message);
-            $('#message').val('');
-        });
+            $(document).on('click', '.deleteMessage', function() {
+                $(this).closest('tr').remove();
+            });
 
-        $(document).on('click', '.deleteMessage', function() {
-            $(this).closest('tr').remove();
-        });
-
-        function addMessage(message) {
-            var html = '';
-            html += '<tr>';
-            html += '<td>' + message + '</td>';
-            html += '<input type="hidden" name="messages[]" value="' + message + '">';
-            html +=
-                '<td><button type="button" class="btn btn-danger btn-sm deleteMessage"><i class="bi bi-trash"></i></button></td>';
-            html += '</tr>';
-            $('#tableMessage tbody').append(html);
-        }
-    </script>
-@endpush
+            function addMessage(message) {
+                var html = '';
+                html += '<tr>';
+                html += '<td>' + message + '</td>';
+                html += '<input type="hidden" name="messages[]" value="' + message + '">';
+                html +=
+                    '<td class="text-center"><button type="button" class="btn btn-danger btn-sm deleteMessage"><i class="bi bi-trash"></i></button></td>';
+                html += '</tr>';
+                $('#tableMessage tbody').append(html);
+            }
+        </script>
+    @endpush

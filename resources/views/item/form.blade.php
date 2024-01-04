@@ -1,17 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-    <main class="container">
-
-        <div class="row mb-4">
-            <div class="col-md-12 d-flex justify-content-between mb-2">
-                <h4>Tambah Barang</h4>
-                <div>
+    <div class="container">
+        <div class="row g-5 mb-4">
+            <div class="col-md-12">
+                <div class="card rounded-4 shadow-lg">
+                    <div class="card-body">
+                        <div class="row justify-content-end">
+                            <div class="col-md-6">
+                                <h2 class="fw-bold p-0 m-0">Tambah Item</h2>
+                            </div>
+                            <div class="col-md-6">
+                                @can('is_admin')
+                                    <a href="{{ route('item.index') }}" class="btn btn-primary float-end rounded-3">
+                                        Kembali
+                                    </a>
+                                @endcan
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="offset-3 col-md-6">
-                <div class="card mt-2">
+                <div class="card rounded-4 shadow-lg mt-2">
                     <div class="card-body">
                         <form action="{{ isset($post) ? route('item.update', $post->id) : route('item.store') }}"
                             method="POST" id="formData">
@@ -287,7 +297,7 @@
             </div>
         </div>
 
-    </main>
+    </div>
 @endsection
 
 @push('style')
@@ -309,7 +319,7 @@
 
         img {
             width: 260px;
-            /* height: 260px; */
+            height: 260px;
         }
 
         .card-upload {
